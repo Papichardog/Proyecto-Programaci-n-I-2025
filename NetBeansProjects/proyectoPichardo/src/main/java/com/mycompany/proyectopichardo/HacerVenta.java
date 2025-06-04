@@ -19,58 +19,78 @@ public class HacerVenta extends javax.swing.JFrame {
      */
     public HacerVenta() {
         initComponents();
+
         // Limpiar los Items del ComboBox
-    jComboBox1.removeAllItems();
+        jComboBox1.removeAllItems();
 
-    // Llenar ComboBox con libros disponibles
-    for (LibroV libro : ProyectoPichardo.getLibrosv()) {
-        jComboBox1.addItem(libro.titulo);
+        // Llenar ComboBox con libros disponibles
+        for (LibroV libro : ProyectoPichardo.getLibrosv()) {
+            jComboBox1.addItem(libro.titulo);
+        }
+// Inicializar ComboBox de cupones
+        jComboBox2.removeAllItems();
+        jComboBox2.addItem("Sin cupón"); // Agrega esta opción predeterminada
+        for (Cupon c : ProyectoPichardo.getCupones()) {
+            jComboBox2.addItem("Código: " + c.codigo + " Valor: " + c.valor + " Tipo: " + c.tipo);
+        }
+
+        // Configurar columnas del JTable
+        DefaultTableModel modelo = new DefaultTableModel();
+        modelo.addColumn("Título");
+        modelo.addColumn("Precio");
+        modelo.addColumn("Cantidad"); // La cantidad siempre será 1 cada vez que selecciones
+        jTable1.setModel(modelo);
+
+        // Escuchar selección del ComboBox
+        jComboBox1.addActionListener(e -> agregarLibroAVenta());
     }
 
-    // Configurar columnas del JTable
-    DefaultTableModel modelo = new DefaultTableModel();
-    modelo.addColumn("Título");
-    modelo.addColumn("Precio");
-    modelo.addColumn("Cantidad"); // La cantidad siempre será 1 cada vez que selecciones
-    jTable1.setModel(modelo);
-
-    // Escuchar selección del ComboBox
-    jComboBox1.addActionListener(e -> agregarLibroAVenta());
-    }
-    
-    private void agregarLibroAVenta() {
-    String tituloSeleccionado = (String) jComboBox1.getSelectedItem();
-
-    if (tituloSeleccionado == null) {
-        return;
+    public javax.swing.JComboBox<String> getComboBoxLibros() {
+        return jComboBox1;
     }
 
-    for (LibroV libro : ProyectoPichardo.getLibrosv()) {
-        if (libro.titulo.equalsIgnoreCase(tituloSeleccionado)) {
-            if (libro.stock > 0) {
-                // Agregar al JTable
-                DefaultTableModel modelo = (DefaultTableModel) jTable1.getModel();
-                modelo.addRow(new Object[]{libro.titulo, libro.precio, 1});
-
-                // Reducir el stock
-                libro.stock--;
-
-                // Mensaje de cuántos libros quedan
-                JOptionPane.showMessageDialog(this, "Quedan " + libro.stock + " unidades de " + libro.titulo);
-
-                // Si ya no hay stock, mostrar mensaje
-                if (libro.stock == 0) {
-                    JOptionPane.showMessageDialog(this, "Ya no hay stock de " + libro.titulo);
-                }
-            } else {
-                // Ya no hay stock
-                JOptionPane.showMessageDialog(this, "Ya no hay stock de " + libro.titulo);
-            }
-            break; // Ya encontramos el libro
+    public void actualizarComboBox() {
+        jComboBox1.removeAllItems();
+        for (LibroV libro : ProyectoPichardo.getLibrosv()) {
+            jComboBox1.addItem(libro.titulo);
         }
     }
-}
 
+    private void agregarLibroAVenta() {
+        String tituloSeleccionado = (String) jComboBox1.getSelectedItem();
+
+        if (tituloSeleccionado == null) {
+            return;
+        }
+
+        for (LibroV libro : ProyectoPichardo.getLibrosv()) {
+            if (libro.titulo.equalsIgnoreCase(tituloSeleccionado)) {
+                if (libro.stock > 0) {
+                    DefaultTableModel modelo = (DefaultTableModel) jTable1.getModel();
+                    modelo.addRow(new Object[]{libro.titulo, libro.precio, 1});
+                    libro.stock--;
+
+                    JOptionPane.showMessageDialog(this, "Quedan " + libro.stock + " unidades de " + libro.titulo);
+
+                    if (libro.stock == 0) {
+                        JOptionPane.showMessageDialog(this, "Ya no hay stock de " + libro.titulo);
+                    }
+
+                    // También reducir en el inventario
+                    for (Libros lib : ProyectoPichardo.getLibros()) {
+                        if (lib.titulo.equalsIgnoreCase(libro.titulo)) {
+                            lib.stock--;
+                            break;
+                        }
+                    }
+
+                    break;
+                } else {
+                    JOptionPane.showMessageDialog(this, "Ya no hay stock de " + libro.titulo);
+                }
+            }
+        }
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -87,6 +107,8 @@ public class HacerVenta extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jComboBox1 = new javax.swing.JComboBox<>();
         jButton2 = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
+        jComboBox2 = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -113,6 +135,11 @@ public class HacerVenta extends javax.swing.JFrame {
         jLabel1.setText("Escoger Libros");
 
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBox1ActionPerformed(evt);
+            }
+        });
 
         jButton2.setText("Hacer venta");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
@@ -120,6 +147,10 @@ public class HacerVenta extends javax.swing.JFrame {
                 jButton2ActionPerformed(evt);
             }
         });
+
+        jLabel2.setText("Escoger Cupon");
+
+        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -132,6 +163,10 @@ public class HacerVenta extends javax.swing.JFrame {
                         .addComponent(jLabel1)
                         .addGap(18, 18, 18)
                         .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 205, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(49, 49, 49)
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jButton1))
                     .addGroup(layout.createSequentialGroup()
@@ -149,7 +184,10 @@ public class HacerVenta extends javax.swing.JFrame {
                         .addComponent(jLabel1))
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel2)
+                            .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 117, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -167,12 +205,11 @@ public class HacerVenta extends javax.swing.JFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
-        if (jTable1.getRowCount() == 0) {
+       if (jTable1.getRowCount() == 0) {
         JOptionPane.showMessageDialog(this, "No hay libros en la venta.");
         return;
     }
 
-    // Pedir datos del cliente
     String nombreCliente = JOptionPane.showInputDialog(this, "Ingrese el nombre del cliente:");
     String nitCliente = JOptionPane.showInputDialog(this, "Ingrese el NIT del cliente:");
     String direccionCliente = JOptionPane.showInputDialog(this, "Ingrese la dirección del cliente:");
@@ -182,60 +219,86 @@ public class HacerVenta extends javax.swing.JFrame {
         return;
     }
 
-    // Calcular totales
     double totalConIVA = 0;
     for (int i = 0; i < jTable1.getRowCount(); i++) {
         double precio = (double) jTable1.getValueAt(i, 1);
         totalConIVA += precio;
     }
+
+    // Obtener cupón seleccionado
+    String seleccion = (String) jComboBox2.getSelectedItem();
+    double descuento = 0;
+    String detalleCupon = "Sin cupón";
+
+    if (seleccion != null && !seleccion.equals("Sin cupón")) {
+        for (Cupon c : ProyectoPichardo.getCupones()) {
+            String etiqueta = "Código: " + c.codigo + " Valor: " + c.valor + " Tipo: " + c.tipo;
+            if (etiqueta.equals(seleccion)) {
+                detalleCupon = etiqueta;
+                if (c.tipo.equalsIgnoreCase("Porcentual")) {
+                    double porcentaje = Double.parseDouble(c.valor);
+                    descuento = totalConIVA * (porcentaje / 100);
+                } else if (c.tipo.equalsIgnoreCase("Monto fijo")) {
+                    descuento = Double.parseDouble(c.valor);
+                }
+                break;
+            }
+        }
+    }
+
+    totalConIVA -= descuento;
     totalConIVA = Math.round(totalConIVA * 100.0) / 100.0;
     double totalSinIVA = Math.round((totalConIVA / 1.12) * 100.0) / 100.0;
 
-    // Obtener vendedor (quien inició sesión)
-    String nombreVendedor = ProyectoPichardo.getUsuarioActual().getNombre(); // Este método lo vamos a crear si no existe
+    String nombreVendedor = ProyectoPichardo.getUsuarioActual().getNombre();
+    Calendar fecha = Calendar.getInstance();
 
-    // Obtener fecha actual
-    Calendar fechaActual = Calendar.getInstance();
+    Venta nueva = new Venta();
+    nueva.nombre = nombreCliente;
+    nueva.nit = nitCliente;
+    nueva.direccion = direccionCliente;
+    nueva.total = totalConIVA;
+    nueva.vendedor = nombreVendedor;
+    nueva.fecha = fecha;
 
-    // Crear objeto Venta
-    Venta nuevaVenta = new Venta();
-    nuevaVenta.nombre = nombreCliente;
-    nuevaVenta.nit = nitCliente;
-    nuevaVenta.direccion = direccionCliente;
-    nuevaVenta.total = totalConIVA;
-    nuevaVenta.vendedor = nombreVendedor;
-    nuevaVenta.fecha = fechaActual;
+    ProyectoPichardo.getVentas().add(nueva);
 
-    // Guardar venta en la lista
-    ProyectoPichardo.getVentas().add(nuevaVenta);
-
-    // Mostrar factura
     String factura = "Factura\n\n" +
-                     "Nombre: " + nombreCliente + "\n" +
-                     "NIT: " + nitCliente + "\n" +
-                     "Dirección: " + direccionCliente + "\n" +
-                     "Vendedor: " + nombreVendedor + "\n" +
-                     "Fecha: " + fechaActual.getTime().toString() + "\n" +
-                     "Total (con IVA): Q" + totalConIVA + "\n" +
-                     "Total (sin IVA): Q" + totalSinIVA;
+        "Nombre: " + nombreCliente + "\n" +
+        "NIT: " + nitCliente + "\n" +
+        "Dirección: " + direccionCliente + "\n" +
+        "Vendedor: " + nombreVendedor + "\n" +
+        "Fecha: " + fecha.getTime().toString() + "\n" +
+        "Total sin IVA: Q" + totalSinIVA + "\n" +
+        "Cupón aplicado: " + detalleCupon + "\n" +
+        "Descuento aplicado: Q" + Math.round(descuento * 100.0) / 100.0 + "\n" +
+        "Total con IVA: Q" + totalConIVA;
 
     JOptionPane.showMessageDialog(this, factura);
 
-    // Opcional: limpiar la tabla
+    // Limpiar tabla
     DefaultTableModel modelo = (DefaultTableModel) jTable1.getModel();
     modelo.setRowCount(0);
+
+    // Restaurar selección de cupón
+    jComboBox2.setSelectedIndex(0);
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jComboBox1ActionPerformed
 
     /**
      * @param args the command line arguments
      */
-    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JComboBox<String> jComboBox2;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
     // End of variables declaration//GEN-END:variables
