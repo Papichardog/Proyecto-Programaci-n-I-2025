@@ -5,7 +5,7 @@
 package com.mycompany.proyectopichardo;
 
 import java.util.Calendar;
-
+import java.util.ArrayList;
 /**
  *
  * @author oem
@@ -17,6 +17,6 @@ public class Venta {
     public double total;
     public String vendedor;
     public Calendar fecha;
-    
+    public ArrayList<LibroV> librosVendidos = new ArrayList<>();
     
 }

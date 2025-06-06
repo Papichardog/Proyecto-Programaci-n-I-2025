@@ -4,7 +4,14 @@
  */
 package com.mycompany.proyectopichardo;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Calendar;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -109,6 +116,8 @@ public class HacerVenta extends javax.swing.JFrame {
         jButton2 = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
         jComboBox2 = new javax.swing.JComboBox<>();
+        jButton3 = new javax.swing.JButton();
+        jButton4 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -152,6 +161,20 @@ public class HacerVenta extends javax.swing.JFrame {
 
         jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
+        jButton3.setText("Exportar ventas a CSV");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+
+        jButton4.setText("Exportar Libros vendidos a CSV");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -171,9 +194,17 @@ public class HacerVenta extends javax.swing.JFrame {
                         .addComponent(jButton1))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 779, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 73, Short.MAX_VALUE)
-                        .addComponent(jButton2)
-                        .addGap(48, 48, 48))))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jButton2)
+                                    .addComponent(jButton3))
+                                .addGap(48, 48, 48))
+                            .addGroup(layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jButton4)
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -191,7 +222,12 @@ public class HacerVenta extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 117, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton2))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jButton2)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButton3)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButton4)))
                 .addContainerGap())
         );
 
@@ -205,88 +241,170 @@ public class HacerVenta extends javax.swing.JFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
-       if (jTable1.getRowCount() == 0) {
-        JOptionPane.showMessageDialog(this, "No hay libros en la venta.");
-        return;
-    }
+        if (jTable1.getRowCount() == 0) {
+            JOptionPane.showMessageDialog(this, "No hay libros en la venta.");
+            return;
+        }
 
-    String nombreCliente = JOptionPane.showInputDialog(this, "Ingrese el nombre del cliente:");
-    String nitCliente = JOptionPane.showInputDialog(this, "Ingrese el NIT del cliente:");
-    String direccionCliente = JOptionPane.showInputDialog(this, "Ingrese la dirección del cliente:");
+        String nombreCliente = JOptionPane.showInputDialog(this, "Ingrese el nombre del cliente:");
+        String nitCliente = JOptionPane.showInputDialog(this, "Ingrese el NIT del cliente:");
+        String direccionCliente = JOptionPane.showInputDialog(this, "Ingrese la dirección del cliente:");
 
-    if (nombreCliente == null || nitCliente == null || direccionCliente == null) {
-        JOptionPane.showMessageDialog(this, "Venta cancelada.");
-        return;
-    }
+        if (nombreCliente == null || nitCliente == null || direccionCliente == null) {
+            JOptionPane.showMessageDialog(this, "Venta cancelada.");
+            return;
+        }
 
-    double totalConIVA = 0;
-    for (int i = 0; i < jTable1.getRowCount(); i++) {
-        double precio = (double) jTable1.getValueAt(i, 1);
-        totalConIVA += precio;
-    }
+        double totalConIVA = 0;
+        for (int i = 0; i < jTable1.getRowCount(); i++) {
+            double precio = (double) jTable1.getValueAt(i, 1);
+            totalConIVA += precio;
+        }
 
-    // Obtener cupón seleccionado
-    String seleccion = (String) jComboBox2.getSelectedItem();
-    double descuento = 0;
-    String detalleCupon = "Sin cupón";
+        // Obtener cupón seleccionado
+        String seleccion = (String) jComboBox2.getSelectedItem();
+        double descuento = 0;
+        String detalleCupon = "Sin cupón";
 
-    if (seleccion != null && !seleccion.equals("Sin cupón")) {
-        for (Cupon c : ProyectoPichardo.getCupones()) {
-            String etiqueta = "Código: " + c.codigo + " Valor: " + c.valor + " Tipo: " + c.tipo;
-            if (etiqueta.equals(seleccion)) {
-                detalleCupon = etiqueta;
-                if (c.tipo.equalsIgnoreCase("Porcentual")) {
-                    double porcentaje = Double.parseDouble(c.valor);
-                    descuento = totalConIVA * (porcentaje / 100);
-                } else if (c.tipo.equalsIgnoreCase("Monto fijo")) {
-                    descuento = Double.parseDouble(c.valor);
+        if (seleccion != null && !seleccion.equals("Sin cupón")) {
+            for (Cupon c : ProyectoPichardo.getCupones()) {
+                String etiqueta = "Código: " + c.codigo + " Valor: " + c.valor + " Tipo: " + c.tipo;
+                if (etiqueta.equals(seleccion)) {
+                    detalleCupon = etiqueta;
+                    if (c.tipo.equalsIgnoreCase("Porcentual")) {
+                        double porcentaje = Double.parseDouble(c.valor);
+                        descuento = totalConIVA * (porcentaje / 100);
+                    } else if (c.tipo.equalsIgnoreCase("Monto fijo")) {
+                        descuento = Double.parseDouble(c.valor);
+                    }
+                    break;
                 }
-                break;
             }
         }
-    }
 
-    totalConIVA -= descuento;
-    totalConIVA = Math.round(totalConIVA * 100.0) / 100.0;
-    double totalSinIVA = Math.round((totalConIVA / 1.12) * 100.0) / 100.0;
+        totalConIVA -= descuento;
+        totalConIVA = Math.round(totalConIVA * 100.0) / 100.0;
+        double totalSinIVA = Math.round((totalConIVA / 1.12) * 100.0) / 100.0;
 
-    String nombreVendedor = ProyectoPichardo.getUsuarioActual().getNombre();
-    Calendar fecha = Calendar.getInstance();
+        String nombreVendedor = ProyectoPichardo.getUsuarioActual().getNombre();
+        Calendar fecha = Calendar.getInstance();
+        // Crear y guardar la venta
+        Venta nueva = new Venta();
+        nueva.nombre = nombreCliente;
+        nueva.nit = nitCliente;
+        nueva.direccion = direccionCliente;
+        nueva.total = totalConIVA;
+        nueva.vendedor = nombreVendedor;
+        nueva.fecha = fecha;
 
-    Venta nueva = new Venta();
-    nueva.nombre = nombreCliente;
-    nueva.nit = nitCliente;
-    nueva.direccion = direccionCliente;
-    nueva.total = totalConIVA;
-    nueva.vendedor = nombreVendedor;
-    nueva.fecha = fecha;
+// Guardar los libros vendidos en la venta
+        for (int i = 0; i < jTable1.getRowCount(); i++) {
+            LibroV libro = new LibroV();
+            libro.titulo = (String) jTable1.getValueAt(i, 0);
+            libro.precio = (double) jTable1.getValueAt(i, 1);
+            libro.stock = (int) jTable1.getValueAt(i, 2);
+            nueva.librosVendidos.add(libro);
+        }
 
-    ProyectoPichardo.getVentas().add(nueva);
+        ProyectoPichardo.getVentas().add(nueva);
 
-    String factura = "Factura\n\n" +
-        "Nombre: " + nombreCliente + "\n" +
-        "NIT: " + nitCliente + "\n" +
-        "Dirección: " + direccionCliente + "\n" +
-        "Vendedor: " + nombreVendedor + "\n" +
-        "Fecha: " + fecha.getTime().toString() + "\n" +
-        "Total sin IVA: Q" + totalSinIVA + "\n" +
-        "Cupón aplicado: " + detalleCupon + "\n" +
-        "Descuento aplicado: Q" + Math.round(descuento * 100.0) / 100.0 + "\n" +
-        "Total con IVA: Q" + totalConIVA;
+        String factura = "Factura\n\n"
+                + "Nombre: " + nombreCliente + "\n"
+                + "NIT: " + nitCliente + "\n"
+                + "Dirección: " + direccionCliente + "\n"
+                + "Vendedor: " + nombreVendedor + "\n"
+                + "Fecha: " + fecha.getTime().toString() + "\n"
+                + "Total sin IVA: Q" + totalSinIVA + "\n"
+                + "Cupón aplicado: " + detalleCupon + "\n"
+                + "Descuento aplicado: Q" + Math.round(descuento * 100.0) / 100.0 + "\n"
+                + "Total con IVA: Q" + totalConIVA;
 
-    JOptionPane.showMessageDialog(this, factura);
+        JOptionPane.showMessageDialog(this, factura);
 
-    // Limpiar tabla
-    DefaultTableModel modelo = (DefaultTableModel) jTable1.getModel();
-    modelo.setRowCount(0);
+        // Limpiar tabla
+        DefaultTableModel modelo = (DefaultTableModel) jTable1.getModel();
+        modelo.setRowCount(0);
 
-    // Restaurar selección de cupón
-    jComboBox2.setSelectedIndex(0);
+        // Restaurar selección de cupón
+        jComboBox2.setSelectedIndex(0);
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jComboBox1ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Guardar informe de ventas");
+
+        int userSelection = fileChooser.showSaveDialog(this);
+
+        if (userSelection == JFileChooser.APPROVE_OPTION) {
+            File archivo = fileChooser.getSelectedFile();
+
+            try (PrintWriter writer = new PrintWriter(new FileWriter(archivo))) {
+                // Escribir encabezados
+                writer.println("Nombre,NIT,Dirección,Vendedor,Fecha,Total sin IVA,Descuento,Total con IVA");
+
+                // Escribir cada venta
+                for (Venta venta : ProyectoPichardo.getVentas()) {
+                    double totalConIVA = venta.total;
+                    double totalSinIVA = Math.round((totalConIVA / 1.12) * 100.0) / 100.0;
+                    double descuento = Math.round((totalSinIVA * 0.12) * 100.0) / 100.0;
+
+                    writer.println(
+                            venta.nombre + ","
+                            + venta.nit + ","
+                            + venta.direccion + ","
+                            + venta.vendedor + ","
+                            + venta.fecha.getTime().toString() + ","
+                            + totalSinIVA + ","
+                            + descuento + ","
+                            + totalConIVA
+                    );
+                }
+
+                writer.flush();
+                JOptionPane.showMessageDialog(this, "Ventas exportadas exitosamente.");
+            } catch (IOException ex) {
+                Logger.getLogger(HacerVenta.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        // TODO add your handling code here:
+        JFileChooser fileChooser = new JFileChooser();
+    fileChooser.setDialogTitle("Guardar reporte de libros vendidos");
+
+    int seleccion = fileChooser.showSaveDialog(this);
+
+    if (seleccion == JFileChooser.APPROVE_OPTION) {
+        File archivo = fileChooser.getSelectedFile();
+
+        try (PrintWriter writer = new PrintWriter(archivo)) {
+            int contadorVenta = 1;
+
+            for (Venta venta : ProyectoPichardo.getVentas()) {
+                writer.println("Venta " + contadorVenta);
+                writer.println("Fecha: " + venta.fecha.getTime().toString());
+                writer.println("Título|Cantidad|Precio");
+
+                for (LibroV libro : venta.librosVendidos) {
+                    writer.println(libro.titulo + "|" + libro.stock + "|" + libro.precio);
+                }
+
+                writer.println(); // Línea vacía entre ventas
+                contadorVenta++;
+            }
+
+            JOptionPane.showMessageDialog(this, "Reporte exportado correctamente.");
+        } catch (IOException ex) {
+            JOptionPane.showMessageDialog(this, "Error al escribir el archivo: " + ex.getMessage());
+        }
+    }
+    }//GEN-LAST:event_jButton4ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -295,6 +413,8 @@ public class HacerVenta extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JComboBox<String> jComboBox2;
     private javax.swing.JLabel jLabel1;

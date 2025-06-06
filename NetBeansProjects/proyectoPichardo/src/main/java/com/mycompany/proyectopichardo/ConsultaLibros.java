@@ -4,11 +4,16 @@
  */
 package com.mycompany.proyectopichardo;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.JComboBox;
-
+import javax.swing.JFileChooser;
+import org.json.JSONObject;
+import org.json.JSONArray;
 /**
  *
  * @author oem
@@ -77,6 +82,7 @@ pintarTabla();
         jTextField4 = new javax.swing.JTextField();
         jComboBox1 = new javax.swing.JComboBox<>();
         jButton5 = new javax.swing.JButton();
+        jButton6 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -140,6 +146,13 @@ pintarTabla();
             }
         });
 
+        jButton6.setText("Exportar Libros a JSON");
+        jButton6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton6ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -180,8 +193,9 @@ pintarTabla();
                             .addComponent(jButton2)
                             .addComponent(jButton3)
                             .addComponent(jButton4)
-                            .addComponent(jButton5))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                            .addComponent(jButton5)
+                            .addComponent(jButton6))
+                        .addContainerGap(12, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -196,7 +210,9 @@ pintarTabla();
                         .addGap(18, 18, 18)
                         .addComponent(jButton4)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButton5)))
+                        .addComponent(jButton5)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jButton6)))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(18, 18, 18)
@@ -320,6 +336,44 @@ pintarTabla();
     }
     }//GEN-LAST:event_jButton5ActionPerformed
 
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+        // TODO add your handling code here:
+        JFileChooser fileChooser = new JFileChooser();
+    fileChooser.setDialogTitle("Guardar archivo JSON");
+    
+    int seleccion = fileChooser.showSaveDialog(this);
+
+    if (seleccion == JFileChooser.APPROVE_OPTION) {
+        File archivo = fileChooser.getSelectedFile();
+
+        // Asegurar que tenga extensión .json
+        if (!archivo.getName().toLowerCase().endsWith(".json")) {
+            archivo = new File(archivo.getAbsolutePath() + ".json");
+        }
+
+        org.json.JSONArray librosArray = new org.json.JSONArray();
+
+        for (Libros libro : ProyectoPichardo.getLibros()) {
+            org.json.JSONObject obj = new org.json.JSONObject();
+            obj.put("titulo", libro.titulo);
+            obj.put("autor", libro.autor);
+            obj.put("precio", libro.precio);
+            obj.put("cantidad", libro.stock);
+            obj.put("genero", libro.genero);
+
+            librosArray.put(obj);
+        }
+
+        try (FileWriter writer = new FileWriter(archivo)) {
+            writer.write(librosArray.toString(4)); // Indentado con 4 espacios
+            writer.flush();
+            JOptionPane.showMessageDialog(this, "Libros exportados a JSON con éxito.");
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(this, "Error al guardar el archivo JSON: " + e.getMessage());
+        }
+    }
+    }//GEN-LAST:event_jButton6ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -330,6 +384,7 @@ pintarTabla();
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
+    private javax.swing.JButton jButton6;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
