@@ -15,6 +15,7 @@ public class Venta {
     public String nit;
     public String direccion;
     public double total;
+    public double totalSinIVA;
     public String vendedor;
     public Calendar fecha;
     public ArrayList<LibroV> librosVendidos = new ArrayList<>();
