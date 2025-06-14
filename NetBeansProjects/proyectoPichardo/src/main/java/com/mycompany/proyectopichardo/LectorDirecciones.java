@@ -30,6 +30,10 @@ public class LectorDirecciones {
         try (BufferedReader br = new BufferedReader(new FileReader(archivo))) {
             String linea;
             int contador = 0;
+
+            // ✅ Saltar la primera línea (encabezado)
+            br.readLine();
+
             while ((linea = br.readLine()) != null) {
                 String[] datos = linea.split("\\|");
                 if (datos.length == 4) {
@@ -52,23 +56,13 @@ public class LectorDirecciones {
                 }
             }
 
-            // Mensaje final
-            StringBuilder mensaje = new StringBuilder("Direcciones cargadas:\n");
-            for (DireccionV d : ProyectoPichardo.getDireccionesv()) {
-                mensaje.append("Calle: ").append(d.calle)
-                       .append(", Avenida: ").append(d.avenida)
-                       .append(", Dirección: ").append(d.direccion)
-                       .append(", Zona: ").append(d.zona)
-                       .append("\n");
-            }
-
             JOptionPane.showMessageDialog(null, contador + " dirección(es) cargada(s) exitosamente.");
-        } catch (IOException e) {
+        } catch (IOException | NumberFormatException e) {
             JOptionPane.showMessageDialog(null, "Error al leer el archivo: " + e.getMessage());
         }
     } else {
         JOptionPane.showMessageDialog(null, "Operación cancelada.");
     }
-}
 
+}
 }

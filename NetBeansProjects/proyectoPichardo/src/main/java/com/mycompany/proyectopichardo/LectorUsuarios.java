@@ -3,6 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package com.mycompany.proyectopichardo;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -13,11 +14,13 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+
 /**
  *
  * @author oem
  */
 public class LectorUsuarios {
+
     public static void cargarUsuariosDesdeArchivo() {
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setDialogTitle("Selecciona el archivo CSV de usuarios");
@@ -30,7 +33,7 @@ public class LectorUsuarios {
             try (BufferedReader br = new BufferedReader(new FileReader(archivo))) {
                 String linea;
                 int contador = 0;
-
+                br.readLine();
                 while ((linea = br.readLine()) != null) {
                     String[] datos = linea.split("\\|");
                     if (datos.length == 4) {

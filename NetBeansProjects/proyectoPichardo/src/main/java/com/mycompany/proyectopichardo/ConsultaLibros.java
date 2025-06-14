@@ -393,7 +393,7 @@ pintarTabla();
             obj.put("titulo", libro.titulo);
             obj.put("autor", libro.autor);
             obj.put("precio", libro.precio);
-            obj.put("cantidad", libro.stock);
+            obj.put("stock", libro.stock);
             obj.put("genero", libro.genero);
 
             librosArray.put(obj);
