@@ -306,13 +306,14 @@ public class VentanaAdministrador extends javax.swing.JFrame {
 
         try (PrintWriter writer = new PrintWriter(new FileWriter(archivo))) {
             // ✅ Encabezados
-            writer.println("codigo|valor|tipo|fecha de vencimiento");
+           writer.println("codigo|valor|tipo|fechavencimiento|fecha");
 
             // ✅ Datos de los cupones
             for (Cupon cupon : ProyectoPichardo.getCupones()) {
-                String linea = cupon.codigo + "|" + cupon.valor + "|" + cupon.tipo + "|" + cupon.fechavencimiento;
-                writer.println(linea);
-            }
+    String fechaStr = cupon.fecha != null ? cupon.fecha.getTime().toString() : "null";
+    String linea = cupon.codigo + "|" + cupon.valor + "|" + cupon.tipo + "|" + cupon.fechavencimiento + "|" + fechaStr;
+    writer.println(linea);
+}
 
             JOptionPane.showMessageDialog(this, "Cupones guardados correctamente en:\n" + archivo.getAbsolutePath());
         } catch (IOException e) {
@@ -351,6 +352,7 @@ public class VentanaAdministrador extends javax.swing.JFrame {
                 writer.println("        <usuario>" + u.getUsuario() + "</usuario>");
                 writer.println("        <password>" + u.getPassword() + "</password>");
                 writer.println("        <rol>" + (u.getRol() == 1 ? "Administrador" : "Vendedor") + "</rol>");
+                writer.println("        <fecha>" + u.getFecha().getTime().toString() + "</fecha>");
                 writer.println("    </usuario>");
             }
 

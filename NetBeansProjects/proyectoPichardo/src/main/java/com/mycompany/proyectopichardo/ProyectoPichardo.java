@@ -4,14 +4,13 @@
 package com.mycompany.proyectopichardo;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 /**
  *
  * @author oem
  */
 public class ProyectoPichardo {
-
-    
 
     private static ArrayList<Usuario> usuarios = new ArrayList<>();
     private static ArrayList<Libros> libros = new ArrayList<>();
@@ -26,55 +25,54 @@ public class ProyectoPichardo {
         u.setUsuario("admin");
         u.setPassword("admin");
         u.setRol(1);
-        
+        Calendar fechaActual = Calendar.getInstance();
+        u.setFecha(fechaActual);
         getUsuarios().add(u);
-        
-        
-        
+
         // Libros predeterminados
-    Libros libro1 = new Libros();
-    libro1.titulo = "El Principito";
-    libro1.autor = "Don Voltaire";
-    libro1.genero = "Aventura";
-    libro1.precio = 20.99;
-    libro1.stock = 10;
+        Libros libro1 = new Libros();
+        libro1.titulo = "El Principito";
+        libro1.autor = "Don Voltaire";
+        libro1.genero = "Aventura";
+        libro1.precio = 20.99;
+        libro1.stock = 10;
+        libro1.fecha = Calendar.getInstance();
 
-    Libros libro2 = new Libros();
-    libro2.titulo = "Romeo y Julieta";
-    libro2.autor = "William Shakespeare";
-    libro2.genero = "Novelas";
-    libro2.precio = 25.99;
-    libro2.stock = 15;
-    
-    // Libros para venta (LibrosV)
-    LibroV libroV1 = new LibroV();
-    libroV1.titulo = "El Principito";
-    libroV1.precio = 20.99;
-    libroV1.stock = 10;
+        Libros libro2 = new Libros();
+        libro2.titulo = "Romeo y Julieta";
+        libro2.autor = "William Shakespeare";
+        libro2.genero = "Novelas";
+        libro2.precio = 25.99;
+        libro2.stock = 15;
+libro2.fecha = Calendar.getInstance();
+        // Libros para venta (LibrosV)
+        LibroV libroV1 = new LibroV();
+        libroV1.titulo = "El Principito";
+        libroV1.precio = 20.99;
+        libroV1.stock = 10;
+        libro1.fecha = Calendar.getInstance();
+        LibroV libroV2 = new LibroV();
+        libroV2.titulo = "Romeo y Julieta";
+        libroV2.precio = 25.99;
+        libroV2.stock = 15;
+        libro2.fecha = Calendar.getInstance();
+        getLibrosv().add(libroV1);
+        getLibrosv().add(libroV2);
 
-    LibroV libroV2 = new LibroV();
-    libroV2.titulo = "Romeo y Julieta";
-    libroV2.precio = 25.99;
-    libroV2.stock = 15;
+        getLibros().add(libro1);
+        getLibros().add(libro2);
 
-    getLibrosv().add(libroV1);
-    getLibrosv().add(libroV2);
+        // Cupones predeterminados
+        Cupon cupon1 = new Cupon("01", "4.99", "Monto fijo", "12/12/26");
+        Cupon cupon2 = new Cupon("02", "10", "Porcentual", "13/12/26");
+// Se agregan con fecha automáticamente desde el constructor
+        getCupones().add(cupon1);
+        getCupones().add(cupon2);
 
-    getLibros().add(libro1);
-    getLibros().add(libro2);
-        
-    // Cupones predeterminados
-Cupon cupon1 = new Cupon("01", "4.99", "Monto fijo", "12/12/26");
-Cupon cupon2 = new Cupon("02", "10", "Porcentual", "13/12/26");
-
-getCupones().add(cupon1);
-getCupones().add(cupon2);
-    
         Login v = new Login();
         v.setVisible(true);
     }
-private static Usuario usuarioActual;
-
+    private static Usuario usuarioActual;
 
     /**
      * @return the usuarios

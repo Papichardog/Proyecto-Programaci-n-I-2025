@@ -4,6 +4,8 @@
  */
 package com.mycompany.proyectopichardo;
 
+import java.util.Calendar;
+
 /**
  *
  * @author oem
@@ -13,8 +15,11 @@ public class Cupon {
       public String valor;
       public String tipo;
       public String fechavencimiento;
+       public Calendar fecha;
     // Constructor vacío (si ya está, no lo repitas)
-    public Cupon() {}
+    public Cupon() {
+        this.fecha = Calendar.getInstance();
+    }
 
     // Constructor con parámetros
     public Cupon(String codigo, String valor, String tipo, String fechavencimiento) {
@@ -22,5 +27,6 @@ public class Cupon {
         this.valor = valor;
         this.tipo = tipo;
         this.fechavencimiento = fechavencimiento;
+        this.fecha = Calendar.getInstance();
     }
 }

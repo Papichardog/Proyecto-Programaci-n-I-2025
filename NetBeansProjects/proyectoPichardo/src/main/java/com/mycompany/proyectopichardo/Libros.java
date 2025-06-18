@@ -4,6 +4,8 @@
  */
 package com.mycompany.proyectopichardo;
 
+import java.util.Calendar;
+
 /**
  *
  * @author oem
@@ -15,4 +17,5 @@ public class Libros {
     public String genero;
     public int stock;
     public double precio;
+     public Calendar fecha;
 }

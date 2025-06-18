@@ -12,6 +12,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Calendar;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
@@ -34,24 +35,29 @@ public class LectorCupones {
                 String linea;
                 int contador = 0;
                 while ((linea = br.readLine()) != null) {
+                    if (linea.trim().toLowerCase().startsWith("codigo")) {
+                        continue;
+                    }
                     String[] datos = linea.split("\\|");
-                    if (datos.length == 4) {
-                        Cupon cupon = new Cupon(
-                                datos[0].trim(),
-                                datos[1].trim(),
-                                datos[2].trim(),
-                                datos[3].trim()
-                        );
-                        ProyectoPichardo.getCupones().add(cupon);
+                    if (datos.length >= 5) {
+                        Cupon c = new Cupon();
+                        c.codigo = datos[0].trim();
+                        c.valor = datos[1].trim();
+                        c.tipo = datos[2].trim();
+                        c.fechavencimiento = datos[3].trim();
+
+                        String fechaTexto = datos[4].trim();
+                        try {
+                            Calendar cal = Calendar.getInstance();
+                            cal.setTime(new java.text.SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", java.util.Locale.ENGLISH).parse(fechaTexto));
+                            c.fecha = cal;
+                        } catch (Exception ex) {
+                            c.fecha = Calendar.getInstance(); // si no puede parsear, usa fecha actual
+                        }
+
+                        ProyectoPichardo.getCupones().add(c);
                         contador++;
 
-                        // Mostrar en consola:
-                        System.out.println("Cupon cargado:");
-                        System.out.println("Código: " + cupon.codigo);
-                        System.out.println("Valor: " + cupon.valor);
-                        System.out.println("Tipo: " + cupon.tipo);
-                        System.out.println("Fecha de vencimiento: " + cupon.fechavencimiento);
-                        System.out.println("--------------------");
                     }
                 }
 // Construir un mensaje para mostrar todos los cupones

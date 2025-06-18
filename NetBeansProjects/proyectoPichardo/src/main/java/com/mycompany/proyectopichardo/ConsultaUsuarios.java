@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -25,16 +26,20 @@ public class ConsultaUsuarios extends javax.swing.JFrame {
     public ConsultaUsuarios() {
         initComponents();
         pintarTabla();
-jComboBox1.removeAllItems();
+        jComboBox1.removeAllItems();
         jComboBox1.addItem("Administrador");
         jComboBox1.addItem("Vendedor");
-        
+
     }
-private Usuario usuarioSeleccionado;
-     private void pintarTabla(){
-        String cabeceras[] = {"Nombre","Usuario","Password","Rol"};
-        
-        DefaultTableModel t = new DefaultTableModel(new String[]{"Nombre", "Usuario", "Password", "Rol"}, ProyectoPichardo.getUsuarios().size());
+    private Usuario usuarioSeleccionado;
+
+    private void pintarTabla() {
+        String cabeceras[] = {"Nombre", "Usuario", "Password", "Rol", "Fecha"};
+
+        DefaultTableModel t = new DefaultTableModel(
+                new String[]{"Nombre", "Usuario", "Password", "Rol", "Fecha"},
+                ProyectoPichardo.getUsuarios().size()
+        );
 
         jTable1.setModel(t);
 
@@ -45,11 +50,11 @@ private Usuario usuarioSeleccionado;
             tabla.setValueAt(u.getUsuario(), i, 1);
             tabla.setValueAt(u.getPassword(), i, 2);
             tabla.setValueAt(u.getRol(), i, 3);
-
+tabla.setValueAt(u.getFecha().getTime().toString(), i, 4);
         }
-        
-        
+
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -62,9 +67,6 @@ private Usuario usuarioSeleccionado;
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
@@ -73,6 +75,9 @@ private Usuario usuarioSeleccionado;
         jTextField2 = new javax.swing.JTextField();
         jTextField3 = new javax.swing.JTextField();
         jComboBox1 = new javax.swing.JComboBox<>();
+        jButton2 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
+        jButton4 = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
         jButton6 = new javax.swing.JButton();
         jButton7 = new javax.swing.JButton();
@@ -100,6 +105,22 @@ private Usuario usuarioSeleccionado;
             }
         });
 
+        jLabel1.setText("Usuario");
+
+        jLabel2.setText("Nombre");
+
+        jLabel3.setText("Password");
+
+        jLabel4.setText("Tipo");
+
+        jTextField3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField3ActionPerformed(evt);
+            }
+        });
+
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
         jButton2.setText("Borrar");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -120,22 +141,6 @@ private Usuario usuarioSeleccionado;
                 jButton4ActionPerformed(evt);
             }
         });
-
-        jLabel1.setText("Usuario");
-
-        jLabel2.setText("Nombre");
-
-        jLabel3.setText("Password");
-
-        jLabel4.setText("Tipo");
-
-        jTextField3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField3ActionPerformed(evt);
-            }
-        });
-
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         jButton5.setText("Cargar CSV a Usuarios");
         jButton5.addActionListener(new java.awt.event.ActionListener() {
@@ -174,15 +179,21 @@ private Usuario usuarioSeleccionado;
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jButton2)
-                            .addComponent(jButton3)
-                            .addComponent(jButton4)
-                            .addComponent(jButton5)
-                            .addComponent(jButton6)
-                            .addComponent(jButton7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jButton8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jButton2)
+                                    .addComponent(jButton3))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 171, Short.MAX_VALUE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jButton5)
+                                    .addComponent(jButton4)
+                                    .addComponent(jButton6)
+                                    .addComponent(jButton7)
+                                    .addComponent(jButton8))
+                                .addGap(0, 0, Short.MAX_VALUE))))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel1)
@@ -192,15 +203,15 @@ private Usuario usuarioSeleccionado;
                         .addGap(45, 45, 45)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
+                                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(jTextField1)
                                     .addComponent(jTextField2)
                                     .addComponent(jTextField3, javax.swing.GroupLayout.DEFAULT_SIZE, 141, Short.MAX_VALUE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jButton1))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, Short.MAX_VALUE)))))
+                                .addComponent(jButton1)))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -208,24 +219,22 @@ private Usuario usuarioSeleccionado;
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(30, 30, 30)
+                        .addGap(16, 16, 16)
                         .addComponent(jButton2)
-                        .addGap(18, 18, 18)
-                        .addComponent(jButton3)
-                        .addGap(18, 18, 18)
-                        .addComponent(jButton4)
-                        .addGap(10, 10, 10)
-                        .addComponent(jButton5)
-                        .addGap(10, 10, 10)
-                        .addComponent(jButton6)
-                        .addGap(9, 9, 9)
-                        .addComponent(jButton7)
                         .addGap(4, 4, 4)
-                        .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(18, 18, 18)
+                        .addComponent(jButton3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton4)
+                        .addGap(19, 19, 19)
+                        .addComponent(jButton5)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton6)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jButton7)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton8))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(24, 24, 24)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jButton1)
                     .addComponent(jLabel1)
@@ -238,11 +247,11 @@ private Usuario usuarioSeleccionado;
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel3)
                     .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel4)
                     .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(39, Short.MAX_VALUE))
+                .addContainerGap(55, Short.MAX_VALUE))
         );
 
         pack();
@@ -251,33 +260,36 @@ private Usuario usuarioSeleccionado;
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
         this.dispose();
-        
+
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jTextField3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField3ActionPerformed
+        // TODO add your handling code here:
+
+    }//GEN-LAST:event_jTextField3ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
         int borrar = jTable1.getSelectedRow();
-        if(borrar>-1){
-            if(borrar == 0){
+        if (borrar > -1) {
+            if (borrar == 0) {
                 JOptionPane.showMessageDialog(this, "No puede eliminar al administrador");
-            }
-            else{
-            
-                if(JOptionPane.showConfirmDialog(this, "Esta seguro de eliminar al usuario")==0){
+            } else {
+
+                if (JOptionPane.showConfirmDialog(this, "Esta seguro de eliminar al usuario") == 0) {
                     ProyectoPichardo.getUsuarios().remove(borrar);
                     pintarTabla();
                     JOptionPane.showMessageDialog(this, "Usuario eliminado");
                 }
             }
-        }
-        else{
+        } else {
             JOptionPane.showMessageDialog(this, "Seleccione un elemento a borrar");
         }
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
-      int modificar = jTable1.getSelectedRow();
+         int modificar = jTable1.getSelectedRow();
     if(modificar > -1){
         usuarioSeleccionado = ProyectoPichardo.getUsuarios().get(modificar);
         jTextField1.setText(usuarioSeleccionado.getUsuario());
@@ -290,14 +302,9 @@ private Usuario usuarioSeleccionado;
     }
     }//GEN-LAST:event_jButton3ActionPerformed
 
-    private void jTextField3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField3ActionPerformed
-        // TODO add your handling code here:
-        
-    }//GEN-LAST:event_jTextField3ActionPerformed
-
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         // TODO add your handling code here:
-          if(usuarioSeleccionado != null){
+        if(usuarioSeleccionado != null){
         usuarioSeleccionado.setNombre(jTextField1.getText());
         usuarioSeleccionado.setUsuario(jTextField2.getText());
         usuarioSeleccionado.setPassword(jTextField3.getText());
@@ -318,8 +325,8 @@ private Usuario usuarioSeleccionado;
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         // TODO add your handling code here:
-         LectorUsuarios.cargarUsuariosDesdeArchivo();
-    pintarTabla(); // Refrescar la tabla después de cargar
+        LectorUsuarios.cargarUsuariosDesdeArchivo();
+    pintarTabla();
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
@@ -333,12 +340,14 @@ private Usuario usuarioSeleccionado;
         File archivo = fileChooser.getSelectedFile();
 
         try (PrintWriter writer = new PrintWriter(new FileWriter(archivo))) {
-            writer.println("nombre|usuario|password|rol");
+            writer.println("nombre|usuario|password|rol|fecha");
 
-            for (Usuario u : ProyectoPichardo.getUsuarios()) {
-                String linea = u.getNombre() + "|" + u.getUsuario() + "|" + u.getPassword() + "|" + u.getRol();
-                writer.println(linea);
-            }
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+for (Usuario u : ProyectoPichardo.getUsuarios()) {
+    String fechaTexto = (u.getFecha() != null) ? sdf.format(u.getFecha().getTime()) : "";
+    String linea = u.getNombre() + "|" + u.getUsuario() + "|" + u.getPassword() + "|" + u.getRol() + "|" + fechaTexto;
+    writer.println(linea);
+}
 
             JOptionPane.showMessageDialog(this, "Usuarios exportados correctamente a:\n" + archivo.getAbsolutePath());
         } catch (IOException e) {
@@ -355,7 +364,7 @@ private Usuario usuarioSeleccionado;
 
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
         // TODO add your handling code here:
-        LecturaUsuariosJSON.guardarUsuariosComoJSON();
+         LecturaUsuariosJSON.guardarUsuariosComoJSON();
     }//GEN-LAST:event_jButton8ActionPerformed
 
     /**

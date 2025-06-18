@@ -12,6 +12,8 @@ import javax.swing.JOptionPane;
 import java.util.Scanner;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 /**
  *
  * @author oem
@@ -44,6 +46,20 @@ public class LecturaCuponesJSON {
                             obj.getString("tipo"),
                             obj.getString("fechavencimiento")
                     );
+                    // Leer fecha de creación (si existe)
+    if (obj.has("fecha") && !obj.getString("fecha").isEmpty()) {
+        String fechaTexto = obj.getString("fecha");
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(sdf.parse(fechaTexto));
+            c.fecha = cal;
+        } catch (Exception e) {
+            c.fecha = Calendar.getInstance();
+        }
+    } else {
+        c.fecha = Calendar.getInstance();
+    }
 
                     ProyectoPichardo.getCupones().add(c);
                     contador++;
@@ -66,12 +82,15 @@ public class LecturaCuponesJSON {
             File archivo = fileChooser.getSelectedFile();
 
             JSONArray array = new JSONArray();
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
             for (Cupon c : ProyectoPichardo.getCupones()) {
                 JSONObject obj = new JSONObject();
                 obj.put("codigo", c.codigo);
                 obj.put("valor", c.valor);
                 obj.put("tipo", c.tipo);
                 obj.put("fechavencimiento", c.fechavencimiento);
+                obj.put("fecha", c.fecha != null ? sdf.format(c.fecha.getTime()) : "");
+    array.put(obj);
                 array.put(obj);
             }
 

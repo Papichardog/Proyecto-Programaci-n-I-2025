@@ -20,31 +20,30 @@ public class ConsultaCupones extends javax.swing.JFrame {
     public ConsultaCupones() {
         initComponents();
         pintarTabla();
-        jComboBox1.removeAllItems(); 
+        jComboBox1.removeAllItems();
         jComboBox1.addItem("Porcentual");
         jComboBox1.addItem("Monto fijo");
     }
     private Cupon cuponSeleccionado;
-    private void pintarTabla(){
-    String cabeceras[] = {"Codigo","Valor","Usuario","Tipo"};
-    
-    DefaultTableModel t = new DefaultTableModel(
-    new String[]{"Código", "Valor", "Tipo", "Fecha de Vencimiento"}, 
-    ProyectoPichardo.getCupones().size()
-);
 
-jTable1.setModel(t);
+    private void pintarTabla() {
+        String[] cabeceras = {"Código", "Valor", "Tipo", "Fecha de Vencimiento", "Fecha de Creación"};
+
+        DefaultTableModel modelo = new DefaultTableModel(cabeceras, ProyectoPichardo.getCupones().size());
+
+        jTable1.setModel(modelo);
 
         TableModel tabla = jTable1.getModel();
-for (int i = 0; i < ProyectoPichardo.getCupones().size(); i++) {
-    Cupon c = ProyectoPichardo.getCupones().get(i);
-    tabla.setValueAt(c.codigo, i, 0);
-    tabla.setValueAt(c.valor, i, 1);
-    tabla.setValueAt(c.tipo, i, 2);
-    tabla.setValueAt(c.fechavencimiento, i, 3);
-    
-}
-    
+        for (int i = 0; i < ProyectoPichardo.getCupones().size(); i++) {
+            Cupon c = ProyectoPichardo.getCupones().get(i);
+            tabla.setValueAt(c.codigo, i, 0);
+            tabla.setValueAt(c.valor, i, 1);
+            tabla.setValueAt(c.tipo, i, 2);
+            tabla.setValueAt(c.fechavencimiento, i, 3);
+            tabla.setValueAt(c.fecha != null ? c.fecha.getTime().toString() : "Sin fecha", i, 4);
+
+        }
+
     }
 
     /**
@@ -237,53 +236,53 @@ for (int i = 0; i < ProyectoPichardo.getCupones().size(); i++) {
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
         int borrar = jTable1.getSelectedRow();
-    
-    if (borrar > -1) {
-        if (JOptionPane.showConfirmDialog(this, "¿Está seguro de eliminar este cupón?") == 0) {
-            ProyectoPichardo.getCupones().remove(borrar);
-            pintarTabla(); // Refrescar la tabla
-            JOptionPane.showMessageDialog(this, "Cupón eliminado correctamente.");
+
+        if (borrar > -1) {
+            if (JOptionPane.showConfirmDialog(this, "¿Está seguro de eliminar este cupón?") == 0) {
+                ProyectoPichardo.getCupones().remove(borrar);
+                pintarTabla(); // Refrescar la tabla
+                JOptionPane.showMessageDialog(this, "Cupón eliminado correctamente.");
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Seleccione un cupón para borrar.");
         }
-    } else {
-        JOptionPane.showMessageDialog(this, "Seleccione un cupón para borrar.");
-    }
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
-         int modificar = jTable1.getSelectedRow();
+        int modificar = jTable1.getSelectedRow();
 
-    if (modificar > -1) {
-        cuponSeleccionado = ProyectoPichardo.getCupones().get(modificar);
+        if (modificar > -1) {
+            cuponSeleccionado = ProyectoPichardo.getCupones().get(modificar);
 
-        jTextField1.setText(cuponSeleccionado.codigo);
-        jTextField2.setText(cuponSeleccionado.valor);
-        jTextField3.setText(cuponSeleccionado.fechavencimiento);
-        jComboBox1.setSelectedItem(cuponSeleccionado.tipo); // Selecciona el tipo en el ComboBox
-    } else {
-        JOptionPane.showMessageDialog(this, "Seleccione un cupón para modificar.");
-    }
+            jTextField1.setText(cuponSeleccionado.codigo);
+            jTextField2.setText(cuponSeleccionado.valor);
+            jTextField3.setText(cuponSeleccionado.fechavencimiento);
+            jComboBox1.setSelectedItem(cuponSeleccionado.tipo); // Selecciona el tipo en el ComboBox
+        } else {
+            JOptionPane.showMessageDialog(this, "Seleccione un cupón para modificar.");
+        }
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-         if (cuponSeleccionado != null) {
-        cuponSeleccionado.codigo = jTextField1.getText();
-        cuponSeleccionado.valor = jTextField2.getText();
-        cuponSeleccionado.fechavencimiento = jTextField3.getText();
-        cuponSeleccionado.tipo = jComboBox1.getSelectedItem().toString();
+        if (cuponSeleccionado != null) {
+            cuponSeleccionado.codigo = jTextField1.getText();
+            cuponSeleccionado.valor = jTextField2.getText();
+            cuponSeleccionado.fechavencimiento = jTextField3.getText();
+            cuponSeleccionado.tipo = jComboBox1.getSelectedItem().toString();
 
-        pintarTabla(); // Actualizar la tabla
-        JOptionPane.showMessageDialog(this, "Cupón actualizado correctamente.");
-        cuponSeleccionado = null; // Limpiar la selección
-    } else {
-        JOptionPane.showMessageDialog(this, "No hay cupón seleccionado para modificar.");
-    }
+            pintarTabla(); // Actualizar la tabla
+            JOptionPane.showMessageDialog(this, "Cupón actualizado correctamente.");
+            cuponSeleccionado = null; // Limpiar la selección
+        } else {
+            JOptionPane.showMessageDialog(this, "No hay cupón seleccionado para modificar.");
+        }
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         // TODO add your handling code here:
         LecturaCuponesJSON.cargarCuponesDesdeJSON();
-         pintarTabla();
+        pintarTabla();
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
@@ -294,7 +293,6 @@ for (int i = 0; i < ProyectoPichardo.getCupones().size(); i++) {
     /**
      * @param args the command line arguments
      */
-   
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;

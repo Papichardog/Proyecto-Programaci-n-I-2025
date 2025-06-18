@@ -11,7 +11,9 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
@@ -36,12 +38,24 @@ public class LectorUsuarios {
                 br.readLine();
                 while ((linea = br.readLine()) != null) {
                     String[] datos = linea.split("\\|");
-                    if (datos.length == 4) {
+                    if (datos.length >= 4) {
                         Usuario u = new Usuario();
                         u.setNombre(datos[0].trim());
                         u.setUsuario(datos[1].trim());
                         u.setPassword(datos[2].trim());
                         u.setRol(Integer.parseInt(datos[3].trim()));
+                        if (datos.length >= 5) {
+                            try {
+                                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+                                Calendar cal = Calendar.getInstance();
+                                cal.setTime(sdf.parse(datos[4].trim()));
+                                u.setFecha(cal);
+                            } catch (Exception e) {
+                                u.setFecha(Calendar.getInstance()); // usa actual si falla
+                            }
+                        } else {
+                            u.setFecha(Calendar.getInstance()); // si no hay fecha
+                        }
 
                         ProyectoPichardo.getUsuarios().add(u);
                         contador++;

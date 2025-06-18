@@ -4,6 +4,8 @@
  */
 package com.mycompany.proyectopichardo;
 
+
+import java.util.Calendar;
 import javax.swing.JOptionPane;
 
 /**
@@ -160,12 +162,15 @@ public class AgregarLibros extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
+
         Libros i = new Libros();
         i.titulo = jTextField1.getText();
         i.autor = jTextField2.getText();
         i.genero = jComboBox1.getSelectedItem().toString();
         i.precio = Double.parseDouble(jTextField3.getText());
         i.stock = Integer.parseInt(jTextField4.getText());
+         i.fecha = Calendar.getInstance(); // ✅ NUEVO
+         
 
         ProyectoPichardo.getLibros().add(i);
         JOptionPane.showMessageDialog(this, "Libro agregado correctamente.");

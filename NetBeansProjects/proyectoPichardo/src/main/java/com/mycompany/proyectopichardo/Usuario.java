@@ -4,11 +4,20 @@
  */
 package com.mycompany.proyectopichardo;
 
+import java.util.Calendar;
+
 /**
  *
  * @author oem
  */
 public class Usuario {
+
+    /**
+     * @param fecha the fecha to set
+     */
+    public void setFecha(Calendar fecha) {
+        this.fecha = fecha;
+    }
 
     /**
      * @return the usuario
@@ -70,4 +79,12 @@ public class Usuario {
     private String nombre;
     private int rol;
     private String password;
+    private Calendar fecha;
+
+    /**
+     * @return the fecha
+     */
+    public Calendar getFecha() {
+        return fecha;
+    }
 }

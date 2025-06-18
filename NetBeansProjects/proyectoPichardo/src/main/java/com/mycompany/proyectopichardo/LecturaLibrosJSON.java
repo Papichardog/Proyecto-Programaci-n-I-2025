@@ -3,19 +3,24 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package com.mycompany.proyectopichardo;
+
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import java.util.Scanner;
 import org.json.JSONArray;
 import org.json.JSONObject;
+
 /**
  *
  * @author oem
  */
 public class LecturaLibrosJSON {
+
     public static void cargarLibrosDesdeJSON() {
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setDialogTitle("Selecciona el archivo JSON de libros");
@@ -42,6 +47,15 @@ public class LecturaLibrosJSON {
                     libro.genero = objeto.getString("genero");
                     libro.precio = objeto.getDouble("precio");
                     libro.stock = objeto.getInt("stock");
+
+                    // ✅ Leer la fecha (si existe)
+                    if (objeto.has("fecha")) {
+                        Calendar fecha = Calendar.getInstance();
+                        fecha.setTimeInMillis(objeto.getLong("fecha"));
+                        libro.fecha = fecha;
+                    } else {
+                        libro.fecha = Calendar.getInstance(); // evitar null
+                    }
 
                     ProyectoPichardo.getLibros().add(libro);
                     contador++;

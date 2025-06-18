@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
@@ -15,6 +16,9 @@ import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import org.json.JSONObject;
 import org.json.JSONArray;
+import java.util.Calendar;
+import java.text.SimpleDateFormat;
+
 /**
  *
  * @author oem
@@ -33,6 +37,7 @@ pintarTabla();
         jComboBox1.addItem("Ciencia Ficción");
         jComboBox1.addItem("Paranormal");
         jComboBox1.addItem("Comedia");
+        jComboBox1.addItem("Fecha");
         
         
         
@@ -40,9 +45,9 @@ pintarTabla();
     }
     private Libros libroSeleccionado;
     private void pintarTabla(){
-        String cabeceras[] = {"Título","Autor","Género","Precio","Stock"};
+        String cabeceras[] = {"Título","Autor","Género","Precio","Stock","Fecha"};
     
-    DefaultTableModel t = new DefaultTableModel(new String[]{"Título", "Autor", "Género", "Precio", "Stock"}, ProyectoPichardo.getLibros().size());
+    DefaultTableModel t = new DefaultTableModel(new String[]{"Título", "Autor", "Género", "Precio", "Stock", "Fecha"}, ProyectoPichardo.getLibros().size());
         jTable1.setModel(t);
         TableModel tabla = jTable1.getModel();
         for (int i = 0; i < ProyectoPichardo.getLibros().size(); i++) {
@@ -52,6 +57,7 @@ pintarTabla();
             tabla.setValueAt(iLibro.genero, i, 2);
             tabla.setValueAt(iLibro.precio, i, 3);
             tabla.setValueAt(iLibro.stock, i, 4);
+            tabla.setValueAt(iLibro.fecha != null ? iLibro.fecha.getTime().toString() : "Sin fecha", i, 5);
         }
         
         
@@ -69,9 +75,6 @@ pintarTabla();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
@@ -82,11 +85,14 @@ pintarTabla();
         jTextField3 = new javax.swing.JTextField();
         jTextField4 = new javax.swing.JTextField();
         jComboBox1 = new javax.swing.JComboBox<>();
-        jButton5 = new javax.swing.JButton();
         jButton6 = new javax.swing.JButton();
+        jButton9 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
+        jButton4 = new javax.swing.JButton();
+        jButton5 = new javax.swing.JButton();
         jButton7 = new javax.swing.JButton();
         jButton8 = new javax.swing.JButton();
-        jButton9 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -107,6 +113,32 @@ pintarTabla();
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
+            }
+        });
+
+        jLabel1.setText("Titulo");
+
+        jLabel2.setText("Autor");
+
+        jLabel3.setText("Genero");
+
+        jLabel4.setText("Precio");
+
+        jLabel5.setText("Stock");
+
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        jButton6.setText("Exportar Libros a JSON");
+        jButton6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton6ActionPerformed(evt);
+            }
+        });
+
+        jButton9.setText("Cargar JSON a Libros");
+        jButton9.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton9ActionPerformed(evt);
             }
         });
 
@@ -131,29 +163,10 @@ pintarTabla();
             }
         });
 
-        jLabel1.setText("Titulo");
-
-        jLabel2.setText("Autor");
-
-        jLabel3.setText("Genero");
-
-        jLabel4.setText("Precio");
-
-        jLabel5.setText("Stock");
-
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
         jButton5.setText("Agregar a Venta");
         jButton5.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton5ActionPerformed(evt);
-            }
-        });
-
-        jButton6.setText("Exportar Libros a JSON");
-        jButton6.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton6ActionPerformed(evt);
             }
         });
 
@@ -171,22 +184,14 @@ pintarTabla();
             }
         });
 
-        jButton9.setText("Cargar JSON a Libros");
-        jButton9.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton9ActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(6, 6, 6)
+                        .addGap(12, 12, 12)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel1)
@@ -207,8 +212,11 @@ pintarTabla();
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel5)
                                 .addGap(18, 18, 18)
-                                .addComponent(jTextField4))))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(jTextField4)))
+                        .addGap(151, 151, 151))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -217,63 +225,66 @@ pintarTabla();
                     .addGroup(layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jButton9)
+                            .addComponent(jButton6)
                             .addComponent(jButton2)
                             .addComponent(jButton3)
                             .addComponent(jButton4)
                             .addComponent(jButton5)
                             .addComponent(jButton7)
-                            .addComponent(jButton8)
-                            .addComponent(jButton9)
-                            .addComponent(jButton6))
+                            .addComponent(jButton8))
                         .addContainerGap(90, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(18, 18, 18)
-                        .addComponent(jButton1))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel1)
-                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(18, 18, 18)
+                                .addComponent(jButton1))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jLabel1)
+                                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jLabel2)
+                                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel2)
-                            .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel4))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5)
-                    .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(0, 7, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(26, 26, 26)
-                .addComponent(jButton2)
-                .addGap(18, 18, 18)
-                .addComponent(jButton3)
-                .addGap(18, 18, 18)
-                .addComponent(jButton4)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton5)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton6)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton9)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton7)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton8)
-                .addGap(127, 127, 127))
+                            .addComponent(jLabel3)
+                            .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel4))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel5)
+                            .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jButton2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jButton4)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton5)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton7)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton8)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton6)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton9)
+                        .addGap(191, 191, 191))))
         );
 
         pack();
@@ -283,6 +294,59 @@ pintarTabla();
         // TODO add your handling code here:
         this.dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+        // TODO add your handling code here:
+         JFileChooser fileChooser = new JFileChooser();
+    fileChooser.setDialogTitle("Guardar archivo JSON");
+    
+    int seleccion = fileChooser.showSaveDialog(this);
+
+    if (seleccion == JFileChooser.APPROVE_OPTION) {
+        File archivo = fileChooser.getSelectedFile();
+
+        // Asegurar que tenga extensión .json
+        if (!archivo.getName().toLowerCase().endsWith(".json")) {
+            archivo = new File(archivo.getAbsolutePath() + ".json");
+        }
+
+        org.json.JSONArray librosArray = new org.json.JSONArray();
+
+        for (Libros libro : ProyectoPichardo.getLibros()) {
+            org.json.JSONObject obj = new org.json.JSONObject();
+            obj.put("titulo", libro.titulo);
+            obj.put("autor", libro.autor);
+            obj.put("precio", libro.precio);
+            obj.put("stock", libro.stock);
+            obj.put("genero", libro.genero);
+            obj.put("fecha", libro.fecha.getTime().toString());
+
+            if (libro.fecha != null) {
+    obj.put("fecha", libro.fecha.getTimeInMillis());
+} else {
+    // ✅ Evita el null metiendo la fecha actual
+    obj.put("fecha", Calendar.getInstance().getTimeInMillis());
+    libro.fecha = Calendar.getInstance(); // también la rellena en memoria
+}
+            
+            librosArray.put(obj);
+        }
+
+        try (FileWriter writer = new FileWriter(archivo)) {
+            writer.write(librosArray.toString(4)); // Indentado con 4 espacios
+            writer.flush();
+            JOptionPane.showMessageDialog(this, "Libros exportados a JSON con éxito.");
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(this, "Error al guardar el archivo JSON: " + e.getMessage());
+        }
+    }
+    }//GEN-LAST:event_jButton6ActionPerformed
+
+    private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
+        // TODO add your handling code here:
+        LecturaLibrosJSON.cargarLibrosDesdeJSON();
+    pintarTabla(); // Refrescar la tabla
+    }//GEN-LAST:event_jButton9ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
@@ -318,7 +382,7 @@ pintarTabla();
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         // TODO add your handling code here:
-       if (libroSeleccionado != null) {
+        if (libroSeleccionado != null) {
         // Guardar los nuevos valores en el libro seleccionado
         libroSeleccionado.titulo = jTextField1.getText();
         libroSeleccionado.autor = jTextField2.getText();
@@ -339,7 +403,7 @@ pintarTabla();
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         // TODO add your handling code here:
-         int filaSeleccionada = jTable1.getSelectedRow();
+        int filaSeleccionada = jTable1.getSelectedRow();
 
     if (filaSeleccionada >= 0) {
         Libros libroSeleccionado = ProyectoPichardo.getLibros().get(filaSeleccionada);
@@ -371,47 +435,9 @@ pintarTabla();
     }
     }//GEN-LAST:event_jButton5ActionPerformed
 
-    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
-        // TODO add your handling code here:
-        JFileChooser fileChooser = new JFileChooser();
-    fileChooser.setDialogTitle("Guardar archivo JSON");
-    
-    int seleccion = fileChooser.showSaveDialog(this);
-
-    if (seleccion == JFileChooser.APPROVE_OPTION) {
-        File archivo = fileChooser.getSelectedFile();
-
-        // Asegurar que tenga extensión .json
-        if (!archivo.getName().toLowerCase().endsWith(".json")) {
-            archivo = new File(archivo.getAbsolutePath() + ".json");
-        }
-
-        org.json.JSONArray librosArray = new org.json.JSONArray();
-
-        for (Libros libro : ProyectoPichardo.getLibros()) {
-            org.json.JSONObject obj = new org.json.JSONObject();
-            obj.put("titulo", libro.titulo);
-            obj.put("autor", libro.autor);
-            obj.put("precio", libro.precio);
-            obj.put("stock", libro.stock);
-            obj.put("genero", libro.genero);
-
-            librosArray.put(obj);
-        }
-
-        try (FileWriter writer = new FileWriter(archivo)) {
-            writer.write(librosArray.toString(4)); // Indentado con 4 espacios
-            writer.flush();
-            JOptionPane.showMessageDialog(this, "Libros exportados a JSON con éxito.");
-        } catch (IOException e) {
-            JOptionPane.showMessageDialog(this, "Error al guardar el archivo JSON: " + e.getMessage());
-        }
-    }
-    }//GEN-LAST:event_jButton6ActionPerformed
-
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
         // TODO add your handling code here:
-        LecturaLibros.cargarLibrosDesdeCSV();
+          LecturaLibros.cargarLibrosDesdeCSV();
     pintarTabla(); // Actualiza la tabla con los nuevos libros
     }//GEN-LAST:event_jButton7ActionPerformed
 
@@ -426,13 +452,16 @@ pintarTabla();
         File archivo = fileChooser.getSelectedFile();
 
         try (PrintWriter writer = new PrintWriter(new FileWriter(archivo))) {
-            // Escribir encabezados
-            writer.println("titulo|autor|genero|precio|stock");
+            // ✅ Encabezados incluyendo fecha
+            writer.println("titulo|autor|genero|precio|stock|fecha");
 
-            // Escribir los libros
+            // ✅ Formato de fecha
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+
             for (Libros libro : ProyectoPichardo.getLibros()) {
+                String fechaTexto = libro.fecha != null ? sdf.format(libro.fecha.getTime()) : "";
                 String linea = libro.titulo + "|" + libro.autor + "|" + libro.genero + "|" +
-                               libro.precio + "|" + libro.stock;
+                               libro.precio + "|" + libro.stock + "|" + fechaTexto;
                 writer.println(linea);
             }
 
@@ -441,14 +470,7 @@ pintarTabla();
             JOptionPane.showMessageDialog(this, "Error al guardar el archivo: " + e.getMessage());
         }
     }
-
     }//GEN-LAST:event_jButton8ActionPerformed
-
-    private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
-        // TODO add your handling code here:
-        LecturaLibrosJSON.cargarLibrosDesdeJSON();
-    pintarTabla(); // Refrescar la tabla
-    }//GEN-LAST:event_jButton9ActionPerformed
 
     /**
      * @param args the command line arguments

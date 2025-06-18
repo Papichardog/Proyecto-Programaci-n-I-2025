@@ -12,8 +12,10 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import org.w3c.dom.*;
 import java.io.IOException;
+import java.util.Calendar;
 import javax.xml.parsers.ParserConfigurationException;
 import org.xml.sax.SAXException;
+
 /**
  *
  * @author oem
@@ -49,6 +51,20 @@ public class LecturaCuponesXML {
                                 getTagValue(elemento, "tipo"),
                                 getTagValue(elemento, "fechavencimiento")
                         );
+String fechaTexto = getTagValue(elemento, "fechacreacion");
+
+if (!fechaTexto.isEmpty()) {
+    java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("dd/MM/yyyy");
+    Calendar cal = Calendar.getInstance();
+    try {
+        cal.setTime(sdf.parse(fechaTexto));
+        cupon.fecha = cal;
+    } catch (Exception e) {
+        cupon.fecha = Calendar.getInstance(); // Usa actual si falla el parseo
+    }
+} else {
+    cupon.fecha = Calendar.getInstance(); // Si no hay campo, usa fecha actual
+}
 
                         ProyectoPichardo.getCupones().add(cupon);
                         contador++;
@@ -83,6 +99,9 @@ public class LecturaCuponesXML {
                     writer.println("    <valor>" + c.valor + "</valor>");
                     writer.println("    <tipo>" + c.tipo + "</tipo>");
                     writer.println("    <fechavencimiento>" + c.fechavencimiento + "</fechavencimiento>");
+                    writer.println("    <fechacreacion>" + 
+    (c.fecha != null ? new java.text.SimpleDateFormat("dd/MM/yyyy").format(c.fecha.getTime()) : "") +
+    "</fechacreacion>");
                     writer.println("  </cupon>");
                 }
 

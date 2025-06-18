@@ -5,6 +5,7 @@
 package com.mycompany.proyectopichardo;
 
 import javax.swing.JOptionPane;
+import java.util.Calendar;
 
 /**
  *
@@ -151,7 +152,7 @@ public class NombreUsurio extends javax.swing.JFrame {
         u.setNombre(jTextField2.getText());
         u.setUsuario(jTextField1.getText());
         u.setPassword(jTextField3.getText());
-
+        u.setFecha(Calendar.getInstance());
         String rol = jComboBox1.getSelectedItem().toString();
 
         if (rol.equals("Administrador")) {

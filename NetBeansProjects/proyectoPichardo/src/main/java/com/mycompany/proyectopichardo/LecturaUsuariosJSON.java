@@ -7,6 +7,8 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import java.util.Scanner;
@@ -42,6 +44,19 @@ public class LecturaUsuariosJSON {
                     u.setUsuario(obj.getString("usuario"));
                     u.setPassword(obj.getString("password"));
                     u.setRol(obj.getInt("rol")); // 1 = Admin, 2 = Vendedor
+                    if (obj.has("fecha")) {
+    try {
+        String fechaTexto = obj.getString("fecha");
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(sdf.parse(fechaTexto));
+        u.setFecha(cal);
+    } catch (Exception e) {
+        u.setFecha(Calendar.getInstance()); // si hay error, usa fecha actual
+    }
+} else {
+    u.setFecha(Calendar.getInstance()); // si no viene la fecha
+}
 
                     ProyectoPichardo.getUsuarios().add(u);
                     contador++;
@@ -69,6 +84,9 @@ public class LecturaUsuariosJSON {
                 obj.put("usuario", u.getUsuario());
                 obj.put("password", u.getPassword());
                 obj.put("rol", u.getRol());
+                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+String fechaTexto = (u.getFecha() != null) ? sdf.format(u.getFecha().getTime()) : "";
+obj.put("fecha", fechaTexto);
                 array.put(obj);
             }
 

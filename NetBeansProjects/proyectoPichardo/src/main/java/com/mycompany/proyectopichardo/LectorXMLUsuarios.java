@@ -15,7 +15,8 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.Node;
-
+import java.util.Calendar;
+import java.text.SimpleDateFormat;
 /**
  *
  * @author oem
@@ -49,6 +50,7 @@ public class LectorXMLUsuarios {
                         String usuario = getTagValue(elemento, "usuario");
                         String password = getTagValue(elemento, "password");
                         String rolTexto = getTagValue(elemento, "rol").toLowerCase();
+                        String fechaTexto = getTagValue(elemento, "fecha");
 
                         // Verifica que los campos esenciales no estén vacíos
                         if (!usuario.isEmpty() && !password.isEmpty()) {
@@ -57,6 +59,14 @@ public class LectorXMLUsuarios {
                             u.setUsuario(usuario);
                             u.setPassword(password);
                             u.setRol(rolTexto.equals("administrador") ? 1 : 2);
+                            
+                            if (!fechaTexto.isEmpty()) {
+    Calendar fecha = Calendar.getInstance();
+    fecha.setTime(new java.text.SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", java.util.Locale.ENGLISH).parse(fechaTexto));
+    u.setFecha(fecha);
+} else {
+    u.setFecha(Calendar.getInstance());
+}
 
                             ProyectoPichardo.getUsuarios().add(u);
                             contador++;
