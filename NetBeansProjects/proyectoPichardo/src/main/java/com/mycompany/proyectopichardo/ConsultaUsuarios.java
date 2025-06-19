@@ -8,7 +8,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.text.SimpleDateFormat;
+
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -342,9 +342,8 @@ tabla.setValueAt(u.getFecha().getTime().toString(), i, 4);
         try (PrintWriter writer = new PrintWriter(new FileWriter(archivo))) {
             writer.println("nombre|usuario|password|rol|fecha");
 
-            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-for (Usuario u : ProyectoPichardo.getUsuarios()) {
-    String fechaTexto = (u.getFecha() != null) ? sdf.format(u.getFecha().getTime()) : "";
+            for (Usuario u : ProyectoPichardo.getUsuarios()) {
+    String fechaTexto = (u.getFecha() != null) ? String.valueOf(u.getFecha().getTimeInMillis()) : "";
     String linea = u.getNombre() + "|" + u.getUsuario() + "|" + u.getPassword() + "|" + u.getRol() + "|" + fechaTexto;
     writer.println(linea);
 }

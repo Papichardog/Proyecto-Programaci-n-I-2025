@@ -3,6 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package com.mycompany.proyectopichardo;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.PrintWriter;
@@ -21,6 +22,7 @@ import org.xml.sax.SAXException;
  * @author oem
  */
 public class LecturaCuponesXML {
+
     // Leer cupones desde XML
     public static void cargarCuponesDesdeXML() {
         JFileChooser fileChooser = new JFileChooser();
@@ -51,20 +53,20 @@ public class LecturaCuponesXML {
                                 getTagValue(elemento, "tipo"),
                                 getTagValue(elemento, "fechavencimiento")
                         );
-String fechaTexto = getTagValue(elemento, "fechacreacion");
+                        String fechaTexto = getTagValue(elemento, "fechacreacion");
 
-if (!fechaTexto.isEmpty()) {
-    java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("dd/MM/yyyy");
-    Calendar cal = Calendar.getInstance();
-    try {
-        cal.setTime(sdf.parse(fechaTexto));
-        cupon.fecha = cal;
-    } catch (Exception e) {
-        cupon.fecha = Calendar.getInstance(); // Usa actual si falla el parseo
-    }
-} else {
-    cupon.fecha = Calendar.getInstance(); // Si no hay campo, usa fecha actual
-}
+                        if (!fechaTexto.isEmpty()) {
+                            try {
+                                long millis = Long.parseLong(fechaTexto);
+                                Calendar cal = Calendar.getInstance();
+                                cal.setTimeInMillis(millis);
+                                cupon.fecha = cal;
+                            } catch (NumberFormatException e) {
+                                cupon.fecha = Calendar.getInstance(); // Usa actual si falla el parseo
+                            }
+                        } else {
+                            cupon.fecha = Calendar.getInstance(); // Si no hay campo, usa actual
+                        }
 
                         ProyectoPichardo.getCupones().add(cupon);
                         contador++;
@@ -99,9 +101,9 @@ if (!fechaTexto.isEmpty()) {
                     writer.println("    <valor>" + c.valor + "</valor>");
                     writer.println("    <tipo>" + c.tipo + "</tipo>");
                     writer.println("    <fechavencimiento>" + c.fechavencimiento + "</fechavencimiento>");
-                    writer.println("    <fechacreacion>" + 
-    (c.fecha != null ? new java.text.SimpleDateFormat("dd/MM/yyyy").format(c.fecha.getTime()) : "") +
-    "</fechacreacion>");
+                    writer.println("    <fechacreacion>"
+                            + (c.fecha != null ? c.fecha.getTimeInMillis() : "")
+                            + "</fechacreacion>");
                     writer.println("  </cupon>");
                 }
 

@@ -13,6 +13,7 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import java.util.Calendar;
 /**
  *
  * @author oem
@@ -20,49 +21,48 @@ import javax.swing.JOptionPane;
 public class LectorDirecciones {
     public static void cargarDireccionesDesdeArchivo() {
     JFileChooser fileChooser = new JFileChooser();
-    fileChooser.setDialogTitle("Selecciona el archivo de direcciones");
+        fileChooser.setDialogTitle("Seleccionar archivo CSV de direcciones");
 
-    int resultado = fileChooser.showOpenDialog(null);
+        if (fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+            File archivo = fileChooser.getSelectedFile();
 
-    if (resultado == JFileChooser.APPROVE_OPTION) {
-        File archivo = fileChooser.getSelectedFile();
+            try (BufferedReader br = new BufferedReader(new FileReader(archivo))) {
+                String linea;
+                int contador = 0;
+                boolean esPrimera = true;
 
-        try (BufferedReader br = new BufferedReader(new FileReader(archivo))) {
-            String linea;
-            int contador = 0;
+                while ((linea = br.readLine()) != null) {
+                    if (esPrimera) {
+                        esPrimera = false; // Saltar encabezado
+                        continue;
+                    }
 
-            // ✅ Saltar la primera línea (encabezado)
-            br.readLine();
+                    String[] datos = linea.split("\\|");
+                    if (datos.length >= 5) {
+                        DireccionV d = new DireccionV();
+                        d.calle = datos[0].trim();
+                        d.avenida = datos[1].trim();
+                        d.direccion = datos[2].trim();
+                        d.zona = Integer.parseInt(datos[3].trim());
 
-            while ((linea = br.readLine()) != null) {
-                String[] datos = linea.split("\\|");
-                if (datos.length == 4) {
-                    DireccionV direccion = new DireccionV();
-                    direccion.calle = datos[0].trim();
-                    direccion.avenida = datos[1].trim();
-                    direccion.direccion = datos[2].trim();
-                    direccion.zona = Integer.parseInt(datos[3].trim());
+                        try {
+                            long millis = Long.parseLong(datos[4].trim());
+                            Calendar cal = Calendar.getInstance();
+                            cal.setTimeInMillis(millis);
+                            d.fecha = cal;
+                        } catch (Exception e) {
+                            d.fecha = Calendar.getInstance();
+                        }
 
-                    ProyectoPichardo.getDireccionesv().add(direccion);
-                    contador++;
-
-                    // Mostrar en consola
-                    System.out.println("Dirección cargada:");
-                    System.out.println("Calle: " + direccion.calle);
-                    System.out.println("Avenida: " + direccion.avenida);
-                    System.out.println("Dirección: " + direccion.direccion);
-                    System.out.println("Zona: " + direccion.zona);
-                    System.out.println("--------------------");
+                        ProyectoPichardo.getDireccionesv().add(d);
+                        contador++;
+                    }
                 }
+
+                JOptionPane.showMessageDialog(null, contador + " dirección(es) cargada(s) exitosamente.");
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, "Error al leer el archivo: " + e.getMessage());
             }
-
-            JOptionPane.showMessageDialog(null, contador + " dirección(es) cargada(s) exitosamente.");
-        } catch (IOException | NumberFormatException e) {
-            JOptionPane.showMessageDialog(null, "Error al leer el archivo: " + e.getMessage());
         }
-    } else {
-        JOptionPane.showMessageDialog(null, "Operación cancelada.");
-    }
-
 }
 }

@@ -22,12 +22,9 @@ public class ConsultaDireccionV extends javax.swing.JFrame {
     }
 private DireccionV direccionvSeleccionado;
 private void pintarTabla(){
-    String cabeceras[] = {"Calle","Avenida","Direccion","Zona"};
+    String[] cabeceras = {"Calle", "Avenida", "Dirección", "Zona", "Fecha"};
     
-    DefaultTableModel t = new DefaultTableModel(
-    new String[]{"calle", "avenida", "direccion", "zona"}, 
-    ProyectoPichardo.getDireccionesv().size()
-);
+    DefaultTableModel t = new DefaultTableModel(cabeceras, ProyectoPichardo.getDireccionesv().size());
 
 jTable1.setModel(t);
 
@@ -38,7 +35,7 @@ for (int i = 0; i < ProyectoPichardo.getDireccionesv().size(); i++) {
     tabla.setValueAt(z.avenida, i, 1);
     tabla.setValueAt(z.direccion, i, 2);
     tabla.setValueAt(z.zona, i, 3);
-    
+     t.setValueAt(z.fecha != null ? z.fecha.getTime().toString() : "Sin fecha", i, 4);
 }
     
     }

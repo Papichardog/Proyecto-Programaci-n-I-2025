@@ -3,22 +3,25 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package com.mycompany.proyectopichardo;
+
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.text.SimpleDateFormat;
+
 import java.util.Calendar;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import java.util.Scanner;
 import org.json.JSONArray;
 import org.json.JSONObject;
+
 /**
  *
  * @author oem
  */
 public class LecturaUsuariosJSON {
+
     public static void cargarUsuariosDesdeJSON() {
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setDialogTitle("Selecciona el archivo JSON de usuarios");
@@ -45,18 +48,17 @@ public class LecturaUsuariosJSON {
                     u.setPassword(obj.getString("password"));
                     u.setRol(obj.getInt("rol")); // 1 = Admin, 2 = Vendedor
                     if (obj.has("fecha")) {
-    try {
-        String fechaTexto = obj.getString("fecha");
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(sdf.parse(fechaTexto));
-        u.setFecha(cal);
-    } catch (Exception e) {
-        u.setFecha(Calendar.getInstance()); // si hay error, usa fecha actual
-    }
-} else {
-    u.setFecha(Calendar.getInstance()); // si no viene la fecha
-}
+                        try {
+                            long millis = obj.getLong("fecha");
+                            Calendar cal = Calendar.getInstance();
+                            cal.setTimeInMillis(millis);
+                            u.setFecha(cal);
+                        } catch (Exception e) {
+                            u.setFecha(Calendar.getInstance()); // si hay error, usa fecha actual
+                        }
+                    } else {
+                        u.setFecha(Calendar.getInstance()); // si no viene la fecha
+                    }
 
                     ProyectoPichardo.getUsuarios().add(u);
                     contador++;
@@ -84,9 +86,8 @@ public class LecturaUsuariosJSON {
                 obj.put("usuario", u.getUsuario());
                 obj.put("password", u.getPassword());
                 obj.put("rol", u.getRol());
-                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-String fechaTexto = (u.getFecha() != null) ? sdf.format(u.getFecha().getTime()) : "";
-obj.put("fecha", fechaTexto);
+                long millis = (u.getFecha() != null) ? u.getFecha().getTimeInMillis() : Calendar.getInstance().getTimeInMillis();
+                obj.put("fecha", millis);
                 array.put(obj);
             }
 

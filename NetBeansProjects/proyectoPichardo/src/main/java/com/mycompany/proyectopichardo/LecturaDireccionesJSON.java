@@ -3,6 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package com.mycompany.proyectopichardo;
+
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
@@ -14,11 +15,13 @@ import javax.swing.JOptionPane;
 import java.util.Scanner;
 import org.json.JSONArray;
 import org.json.JSONObject;
+
 /**
  *
  * @author oem
  */
 public class LecturaDireccionesJSON {
+
     public static void cargarDireccionesDesdeJSON() {
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setDialogTitle("Selecciona el archivo JSON de direcciones");
@@ -44,6 +47,15 @@ public class LecturaDireccionesJSON {
                     d.avenida = obj.getString("avenida");
                     d.direccion = obj.getString("direccion");
                     d.zona = obj.getInt("zona");
+
+                    if (obj.has("fecha")) {
+                        long millis = obj.getLong("fecha");
+                        Calendar cal = Calendar.getInstance();
+                        cal.setTimeInMillis(millis);
+                        d.fecha = cal;
+                    } else {
+                        d.fecha = Calendar.getInstance();
+                    }
 
                     ProyectoPichardo.getDireccionesv().add(d);
                     contador++;
@@ -71,6 +83,7 @@ public class LecturaDireccionesJSON {
                 obj.put("avenida", d.avenida);
                 obj.put("direccion", d.direccion);
                 obj.put("zona", d.zona);
+                obj.put("fecha", d.fecha != null ? d.fecha.getTimeInMillis() : Calendar.getInstance().getTimeInMillis());
                 array.put(obj);
             }
 

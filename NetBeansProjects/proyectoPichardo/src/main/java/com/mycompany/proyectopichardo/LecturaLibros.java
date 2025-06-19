@@ -11,7 +11,6 @@ import java.io.IOException;
 import java.util.Calendar;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
-import java.text.SimpleDateFormat;
 
 /**
  *
@@ -33,9 +32,6 @@ public class LecturaLibros {
                 int contador = 0;
                 boolean esPrimera = true;
 
-                // ✅ Formato para leer la fecha
-                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-
                 while ((linea = br.readLine()) != null) {
                     if (esPrimera) {
                         esPrimera = false; // Saltar encabezado
@@ -53,8 +49,9 @@ public class LecturaLibros {
                         libro.stock = Integer.parseInt(datos[4].trim());
 
                         try {
+                            long millis = Long.parseLong(datos[5].trim());
                             Calendar cal = Calendar.getInstance();
-                            cal.setTime(sdf.parse(datos[5].trim()));
+                            cal.setTimeInMillis(millis);
                             libro.fecha = cal;
                         } catch (Exception e) {
                             libro.fecha = Calendar.getInstance(); // usar actual si hay error

@@ -48,8 +48,9 @@ public class LectorCupones {
 
                         String fechaTexto = datos[4].trim();
                         try {
+                            long millis = Long.parseLong(fechaTexto);
                             Calendar cal = Calendar.getInstance();
-                            cal.setTime(new java.text.SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", java.util.Locale.ENGLISH).parse(fechaTexto));
+                            cal.setTimeInMillis(millis);
                             c.fecha = cal;
                         } catch (Exception ex) {
                             c.fecha = Calendar.getInstance(); // si no puede parsear, usa fecha actual

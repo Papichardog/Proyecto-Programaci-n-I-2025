@@ -14,7 +14,6 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import org.w3c.dom.*;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import javax.xml.parsers.ParserConfigurationException;
 import org.xml.sax.SAXException;
@@ -54,19 +53,15 @@ public class LecturaLibrosXML {
                         libro.genero = getTagValue(elemento, "genero");
                         libro.precio = Double.parseDouble(getTagValue(elemento, "precio"));
                         libro.stock = Integer.parseInt(getTagValue(elemento, "stock"));
-                        String fechaTexto = getTagValue(elemento, "fecha");
-                        if (!fechaTexto.isEmpty()) {
-                            try {
-                                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-                                Calendar cal = Calendar.getInstance();
-                                cal.setTime(sdf.parse(fechaTexto));
-                                libro.fecha = cal;
-                            } catch (Exception e) {
-                                libro.fecha = Calendar.getInstance(); // si hay error, usa la fecha actual
-                            }
+                        if (getTagValue(elemento, "fecha").isEmpty()) {
+                            libro.fecha = Calendar.getInstance(); // por defecto
                         } else {
-                            libro.fecha = Calendar.getInstance(); // si no tiene fecha, le damos una
+                            long millis = Long.parseLong(getTagValue(elemento, "fecha"));
+                            Calendar cal = Calendar.getInstance();
+                            cal.setTimeInMillis(millis);
+                            libro.fecha = cal;
                         }
+
                         ProyectoPichardo.getLibros().add(libro);
                         contador++;
                     }
@@ -91,7 +86,7 @@ public class LecturaLibrosXML {
             try (PrintWriter writer = new PrintWriter(new FileWriter(archivo))) {
                 writer.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
                 writer.println("<libros>");
-                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+
                 for (Libros libro : ProyectoPichardo.getLibros()) {
                     writer.println("  <libro>");
                     writer.println("    <titulo>" + libro.titulo + "</titulo>");
@@ -99,8 +94,8 @@ public class LecturaLibrosXML {
                     writer.println("    <genero>" + libro.genero + "</genero>");
                     writer.println("    <precio>" + libro.precio + "</precio>");
                     writer.println("    <stock>" + libro.stock + "</stock>");
-                    String fechaTexto = libro.fecha != null ? sdf.format(libro.fecha.getTime()) : "";
-                    writer.println("    <fecha>" + fechaTexto + "</fecha>");
+                    writer.println("    <fecha>" + libro.fecha.getTimeInMillis() + "</fecha>");
+
                     writer.println("  </libro>");
                 }
 

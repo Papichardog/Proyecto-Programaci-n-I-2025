@@ -17,13 +17,15 @@ import org.w3c.dom.NodeList;
 import org.w3c.dom.Node;
 import java.util.Calendar;
 import java.text.SimpleDateFormat;
+
 /**
  *
  * @author oem
  */
 public class LectorXMLUsuarios {
+
     public static void cargarUsuariosDesdeXML() {
-      
+
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setDialogTitle("Selecciona el archivo XML de usuarios");
 
@@ -59,14 +61,20 @@ public class LectorXMLUsuarios {
                             u.setUsuario(usuario);
                             u.setPassword(password);
                             u.setRol(rolTexto.equals("administrador") ? 1 : 2);
-                            
+
                             if (!fechaTexto.isEmpty()) {
-    Calendar fecha = Calendar.getInstance();
-    fecha.setTime(new java.text.SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", java.util.Locale.ENGLISH).parse(fechaTexto));
-    u.setFecha(fecha);
-} else {
-    u.setFecha(Calendar.getInstance());
-}
+
+                                try {
+                                    long millis = Long.parseLong(fechaTexto);
+                                    Calendar fecha = Calendar.getInstance();
+                                    fecha.setTimeInMillis(millis);
+                                    u.setFecha(fecha);
+                                } catch (Exception e) {
+                                    u.setFecha(Calendar.getInstance());
+                                }
+                            } else {
+                                u.setFecha(Calendar.getInstance());
+                            }
 
                             ProyectoPichardo.getUsuarios().add(u);
                             contador++;

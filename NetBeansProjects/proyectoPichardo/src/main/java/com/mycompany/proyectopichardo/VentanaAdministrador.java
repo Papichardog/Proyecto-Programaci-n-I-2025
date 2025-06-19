@@ -22,7 +22,7 @@ public class VentanaAdministrador extends javax.swing.JFrame {
      */
     public VentanaAdministrador() {
         initComponents();
-        
+
     }
 
     /**
@@ -246,12 +246,12 @@ public class VentanaAdministrador extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
         // Cierra la ventana actual
-    this.dispose();
+        this.dispose();
 
-    // Vuelve a mostrar el login
-    Login login = new Login();
-    login.setVisible(true);
-    login.setLocationRelativeTo(null); // Centra la ventana
+        // Vuelve a mostrar el login
+        Login login = new Login();
+        login.setVisible(true);
+        login.setLocationRelativeTo(null); // Centra la ventana
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
@@ -284,7 +284,7 @@ public class VentanaAdministrador extends javax.swing.JFrame {
 
     private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
         // TODO add your handling code here:
-         ConsultaCupones c = new ConsultaCupones();
+        ConsultaCupones c = new ConsultaCupones();
         c.setVisible(true);
     }//GEN-LAST:event_jMenuItem5ActionPerformed
 
@@ -297,29 +297,30 @@ public class VentanaAdministrador extends javax.swing.JFrame {
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
         JFileChooser fileChooser = new JFileChooser();
-    fileChooser.setDialogTitle("Guardar cupones como archivo CSV");
+        fileChooser.setDialogTitle("Guardar cupones como archivo CSV");
 
-    int seleccion = fileChooser.showSaveDialog(this);
+        int seleccion = fileChooser.showSaveDialog(this);
 
-    if (seleccion == JFileChooser.APPROVE_OPTION) {
-        File archivo = fileChooser.getSelectedFile();
+        if (seleccion == JFileChooser.APPROVE_OPTION) {
+            File archivo = fileChooser.getSelectedFile();
 
-        try (PrintWriter writer = new PrintWriter(new FileWriter(archivo))) {
-            // ✅ Encabezados
-           writer.println("codigo|valor|tipo|fechavencimiento|fecha");
+            try (PrintWriter writer = new PrintWriter(new FileWriter(archivo))) {
+                // ✅ Encabezados
+                writer.println("codigo|valor|tipo|fechavencimiento|fecha");
 
-            // ✅ Datos de los cupones
-            for (Cupon cupon : ProyectoPichardo.getCupones()) {
-    String fechaStr = cupon.fecha != null ? cupon.fecha.getTime().toString() : "null";
-    String linea = cupon.codigo + "|" + cupon.valor + "|" + cupon.tipo + "|" + cupon.fechavencimiento + "|" + fechaStr;
-    writer.println(linea);
-}
+                // ✅ Datos de los cupones
+                for (Cupon cupon : ProyectoPichardo.getCupones()) {
+                    String fechaStr = cupon.fecha != null ? String.valueOf(cupon.fecha.getTimeInMillis()) : "";
 
-            JOptionPane.showMessageDialog(this, "Cupones guardados correctamente en:\n" + archivo.getAbsolutePath());
-        } catch (IOException e) {
-            JOptionPane.showMessageDialog(this, "Error al guardar el archivo: " + e.getMessage());
+                    String linea = cupon.codigo + "|" + cupon.valor + "|" + cupon.tipo + "|" + cupon.fechavencimiento + "|" + fechaStr;
+                    writer.println(linea);
+                }
+
+                JOptionPane.showMessageDialog(this, "Cupones guardados correctamente en:\n" + archivo.getAbsolutePath());
+            } catch (IOException e) {
+                JOptionPane.showMessageDialog(this, "Error al guardar el archivo: " + e.getMessage());
+            }
         }
-    }
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
@@ -335,33 +336,34 @@ public class VentanaAdministrador extends javax.swing.JFrame {
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         // TODO add your handling code here:
         JFileChooser fileChooser = new JFileChooser();
-    fileChooser.setDialogTitle("Guardar usuarios en archivo XML");
+        fileChooser.setDialogTitle("Guardar usuarios en archivo XML");
 
-    int seleccion = fileChooser.showSaveDialog(this);
+        int seleccion = fileChooser.showSaveDialog(this);
 
-    if (seleccion == JFileChooser.APPROVE_OPTION) {
-        File archivo = fileChooser.getSelectedFile();
+        if (seleccion == JFileChooser.APPROVE_OPTION) {
+            File archivo = fileChooser.getSelectedFile();
 
-        try (PrintWriter writer = new PrintWriter(new FileWriter(archivo))) {
-            writer.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
-            writer.println("<usuarios>");
+            try (PrintWriter writer = new PrintWriter(new FileWriter(archivo))) {
+                writer.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+                writer.println("<usuarios>");
 
-            for (Usuario u : ProyectoPichardo.getUsuarios()) {
-                writer.println("    <usuario>");
-                writer.println("        <nombre>" + u.getNombre() + "</nombre>");
-                writer.println("        <usuario>" + u.getUsuario() + "</usuario>");
-                writer.println("        <password>" + u.getPassword() + "</password>");
-                writer.println("        <rol>" + (u.getRol() == 1 ? "Administrador" : "Vendedor") + "</rol>");
-                writer.println("        <fecha>" + u.getFecha().getTime().toString() + "</fecha>");
-                writer.println("    </usuario>");
+                for (Usuario u : ProyectoPichardo.getUsuarios()) {
+                    writer.println("    <usuario>");
+                    writer.println("        <nombre>" + u.getNombre() + "</nombre>");
+                    writer.println("        <usuario>" + u.getUsuario() + "</usuario>");
+                    writer.println("        <password>" + u.getPassword() + "</password>");
+                    writer.println("        <rol>" + (u.getRol() == 1 ? "Administrador" : "Vendedor") + "</rol>");
+                    writer.println("        <fecha>" + u.getFecha().getTimeInMillis() + "</fecha>");
+
+                    writer.println("    </usuario>");
+                }
+
+                writer.println("</usuarios>");
+                JOptionPane.showMessageDialog(this, "Usuarios exportados correctamente a:\n" + archivo.getAbsolutePath());
+            } catch (IOException e) {
+                JOptionPane.showMessageDialog(this, "Error al guardar el archivo:\n" + e.getMessage());
             }
-
-            writer.println("</usuarios>");
-            JOptionPane.showMessageDialog(this, "Usuarios exportados correctamente a:\n" + archivo.getAbsolutePath());
-        } catch (IOException e) {
-            JOptionPane.showMessageDialog(this, "Error al guardar el archivo:\n" + e.getMessage());
         }
-    }
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
@@ -381,7 +383,7 @@ public class VentanaAdministrador extends javax.swing.JFrame {
 
     private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
         // TODO add your handling code here:
-         LecturaCuponesXML.guardarCuponesComoXML();
+        LecturaCuponesXML.guardarCuponesComoXML();
     }//GEN-LAST:event_jButton9ActionPerformed
 
     /**

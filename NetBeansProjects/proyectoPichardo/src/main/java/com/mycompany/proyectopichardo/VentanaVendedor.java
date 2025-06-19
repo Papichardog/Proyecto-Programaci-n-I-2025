@@ -22,10 +22,10 @@ public class VentanaVendedor extends javax.swing.JFrame {
      */
     public VentanaVendedor(Usuario usuario) {
         initComponents();
-        
-      this.usuario = usuario;
+
+        this.usuario = usuario;
     }
-private Usuario usuario;
+    private Usuario usuario;
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -231,9 +231,9 @@ private Usuario usuario;
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-         Login login = new Login(); // Crea una nueva instancia de Login
-    login.setVisible(true);    // Muestra la ventana de LoginS
-    this.dispose();            // Cierra VentanaVendedor
+        Login login = new Login(); // Crea una nueva instancia de Login
+        login.setVisible(true);    // Muestra la ventana de LoginS
+        this.dispose();            // Cierra VentanaVendedor
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
@@ -242,32 +242,32 @@ private Usuario usuario;
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
-       String nuevoPassword = jTextField1.getText().trim();
+        String nuevoPassword = jTextField1.getText().trim();
 
-    if (!nuevoPassword.isEmpty()) {
-        usuario.setPassword(nuevoPassword); // Cambiar la contraseña del usuario
-        JOptionPane.showMessageDialog(this, "Contraseña actualizada exitosamente.");
-        
-    } else {
-        JOptionPane.showMessageDialog(this, "Por favor, ingrese una nueva contraseña.");
-    }
+        if (!nuevoPassword.isEmpty()) {
+            usuario.setPassword(nuevoPassword); // Cambiar la contraseña del usuario
+            JOptionPane.showMessageDialog(this, "Contraseña actualizada exitosamente.");
+
+        } else {
+            JOptionPane.showMessageDialog(this, "Por favor, ingrese una nueva contraseña.");
+        }
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
         // TODO add your handling code here:
-        HacerVenta c = new HacerVenta ();
+        HacerVenta c = new HacerVenta();
         c.setVisible(true);
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
-AgregarDireccionV c = new AgregarDireccionV ();
-        c.setVisible(true);       
+        AgregarDireccionV c = new AgregarDireccionV();
+        c.setVisible(true);
     }//GEN-LAST:event_jMenuItem3ActionPerformed
 
     private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
         // TODO add your handling code here:
-        ConsultaDireccionV c = new ConsultaDireccionV ();
-        c.setVisible(true);  
+        ConsultaDireccionV c = new ConsultaDireccionV();
+        c.setVisible(true);
     }//GEN-LAST:event_jMenuItem4ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
@@ -277,31 +277,32 @@ AgregarDireccionV c = new AgregarDireccionV ();
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
-         JFileChooser fileChooser = new JFileChooser();
-    fileChooser.setDialogTitle("Guardar direcciones como archivo CSV");
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Guardar direcciones como archivo CSV");
 
-    int seleccion = fileChooser.showSaveDialog(this);
+        int seleccion = fileChooser.showSaveDialog(this);
 
-    if (seleccion == JFileChooser.APPROVE_OPTION) {
-        File archivo = fileChooser.getSelectedFile();
+        if (seleccion == JFileChooser.APPROVE_OPTION) {
+            File archivo = fileChooser.getSelectedFile();
 
-        try (PrintWriter writer = new PrintWriter(new FileWriter(archivo))) {
-            // Encabezados
-            writer.println("calle|avenida|direccion|zona");
+            try (PrintWriter writer = new PrintWriter(new FileWriter(archivo))) {
+                // Encabezados
+                writer.println("calle|avenida|direccion|zona|fecha");
 
-            // Datos de las direcciones
-            for (DireccionV d : ProyectoPichardo.getDireccionesv()) {
-                String linea = d.calle + "|" + d.avenida + "|" + d.direccion + "|" + d.zona;
-                writer.println(linea);
+                // Datos de las direcciones
+                for (DireccionV d : ProyectoPichardo.getDireccionesv()) {
+                    long fechaMillis = (d.fecha != null) ? d.fecha.getTimeInMillis() : 0;
+                    String linea = d.calle + "|" + d.avenida + "|" + d.direccion + "|" + d.zona + "|" + fechaMillis;
+                    writer.println(linea);
+                }
+
+                JOptionPane.showMessageDialog(this, "Direcciones guardadas correctamente en:\n" + archivo.getAbsolutePath());
+            } catch (IOException e) {
+                JOptionPane.showMessageDialog(this, "Error al guardar el archivo: " + e.getMessage());
             }
-
-            JOptionPane.showMessageDialog(this, "Direcciones guardadas correctamente en:\n" + archivo.getAbsolutePath());
-        } catch (IOException e) {
-            JOptionPane.showMessageDialog(this, "Error al guardar el archivo: " + e.getMessage());
+        } else {
+            JOptionPane.showMessageDialog(this, "Operación cancelada.");
         }
-    } else {
-        JOptionPane.showMessageDialog(this, "Operación cancelada.");
-    }
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
@@ -311,13 +312,13 @@ AgregarDireccionV c = new AgregarDireccionV ();
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
         // TODO add your handling code here:
-            LecturaDireccionesXML.guardarDireccionesComoXML();
+        LecturaDireccionesXML.guardarDireccionesComoXML();
     }//GEN-LAST:event_jButton6ActionPerformed
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
         // TODO add your handling code here:
         LecturaDireccionesJSON.cargarDireccionesDesdeJSON();
-        
+
     }//GEN-LAST:event_jButton7ActionPerformed
 
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed

@@ -8,7 +8,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.text.SimpleDateFormat;
+
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
@@ -453,17 +453,17 @@ pintarTabla();
 
         try (PrintWriter writer = new PrintWriter(new FileWriter(archivo))) {
             // ✅ Encabezados incluyendo fecha
-            writer.println("titulo|autor|genero|precio|stock|fecha");
+           writer.println("titulo|autor|genero|precio|stock|fecha");
 
-            // ✅ Formato de fecha
-            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+
+           
 
             for (Libros libro : ProyectoPichardo.getLibros()) {
-                String fechaTexto = libro.fecha != null ? sdf.format(libro.fecha.getTime()) : "";
-                String linea = libro.titulo + "|" + libro.autor + "|" + libro.genero + "|" +
-                               libro.precio + "|" + libro.stock + "|" + fechaTexto;
-                writer.println(linea);
-            }
+    String fechaTexto = libro.fecha != null ? String.valueOf(libro.fecha.getTimeInMillis()) : "";
+    String linea = libro.titulo + "|" + libro.autor + "|" + libro.genero + "|" +
+                   libro.precio + "|" + libro.stock + "|" + fechaTexto;
+    writer.println(linea);
+}
 
             JOptionPane.showMessageDialog(this, "Libros exportados correctamente a:\n" + archivo.getAbsolutePath());
         } catch (IOException e) {

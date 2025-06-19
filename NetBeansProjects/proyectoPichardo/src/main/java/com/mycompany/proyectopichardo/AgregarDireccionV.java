@@ -4,6 +4,7 @@
  */
 package com.mycompany.proyectopichardo;
 
+import java.util.Calendar;
 import javax.swing.JOptionPane;
 
 /**
@@ -133,6 +134,7 @@ public class AgregarDireccionV extends javax.swing.JFrame {
     z.avenida = jTextField2.getText();
     z.direccion = jTextField3.getText();
     z.zona = Integer.parseInt(jTextField4.getText());
+    z.fecha = Calendar.getInstance();
     
    ProyectoPichardo.getDireccionesv().add(z);
         JOptionPane.showMessageDialog(this, "Direccion agregado correctamente.");

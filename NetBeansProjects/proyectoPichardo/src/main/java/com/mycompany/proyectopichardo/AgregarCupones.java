@@ -4,6 +4,7 @@
  */
 package com.mycompany.proyectopichardo;
 
+import java.util.Calendar;
 import javax.swing.JOptionPane;
 
 /**
@@ -146,6 +147,7 @@ public class AgregarCupones extends javax.swing.JFrame {
     c.fechavencimiento = jTextField3.getText();
     c.tipo = jComboBox1.getSelectedItem().toString(); // <--- aquí capturas el tipo
 
+    c.fecha = Calendar.getInstance();
     // Validación simple
     if (c.codigo.isEmpty() || c.valor.isEmpty() || c.fechavencimiento.isEmpty()) {
         JOptionPane.showMessageDialog(this, "Por favor, complete todos los campos.");

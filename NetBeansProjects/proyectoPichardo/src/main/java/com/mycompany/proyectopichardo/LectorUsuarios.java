@@ -11,7 +11,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.text.SimpleDateFormat;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import javax.swing.JFileChooser;
@@ -46,15 +46,15 @@ public class LectorUsuarios {
                         u.setRol(Integer.parseInt(datos[3].trim()));
                         if (datos.length >= 5) {
                             try {
-                                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+                                long millis = Long.parseLong(datos[4].trim());
                                 Calendar cal = Calendar.getInstance();
-                                cal.setTime(sdf.parse(datos[4].trim()));
+                                cal.setTimeInMillis(millis);
                                 u.setFecha(cal);
                             } catch (Exception e) {
-                                u.setFecha(Calendar.getInstance()); // usa actual si falla
+                                u.setFecha(Calendar.getInstance());
                             }
                         } else {
-                            u.setFecha(Calendar.getInstance()); // si no hay fecha
+                            u.setFecha(Calendar.getInstance());
                         }
 
                         ProyectoPichardo.getUsuarios().add(u);
