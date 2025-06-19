@@ -20,6 +20,7 @@ public class ProyectoPichardo {
     private static ArrayList<DireccionV> direccionesv = new ArrayList<>();
 
     public static void main(String[] args) {
+         PersistenciaBinaria.cargarTodo();
         Usuario u = new Usuario();
         u.setNombre("admin");
         u.setUsuario("admin");
@@ -68,9 +69,13 @@ libro2.fecha = Calendar.getInstance();
 // Se agregan con fecha automáticamente desde el constructor
         getCupones().add(cupon1);
         getCupones().add(cupon2);
-
+ 
         Login v = new Login();
         v.setVisible(true);
+       
+         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+        PersistenciaBinaria.guardarTodo();
+    }));
     }
     private static Usuario usuarioActual;
 

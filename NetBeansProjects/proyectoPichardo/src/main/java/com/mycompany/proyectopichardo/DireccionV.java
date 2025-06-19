@@ -4,14 +4,17 @@
  */
 package com.mycompany.proyectopichardo;
 import java.util.Calendar;
+import java.io.Serializable;
+
 /**
  *
  * @author oem
  */
-public class DireccionV {
+public class DireccionV implements Serializable{
     public String calle;
     public String avenida;
     public String direccion;
     public int zona;
      public Calendar fecha;
+     
 }

@@ -6,11 +6,12 @@ package com.mycompany.proyectopichardo;
 
 import java.util.Calendar;
 import java.util.ArrayList;
+import java.io.Serializable;
 /**
  *
  * @author oem
  */
-public class Venta {
+public class Venta implements Serializable{
     public String nombre;
     public String nit;
     public String direccion;
@@ -18,6 +19,8 @@ public class Venta {
     public double totalSinIVA;
     public String vendedor;
     public Calendar fecha;
+    
     public ArrayList<LibroV> librosVendidos = new ArrayList<>();
     
 }
+ 

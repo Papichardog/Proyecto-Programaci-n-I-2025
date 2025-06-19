@@ -3,6 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package com.mycompany.proyectopichardo;
+import java.io.Serializable;
 
 import java.util.Calendar;
 
@@ -10,7 +11,7 @@ import java.util.Calendar;
  *
  * @author oem
  */
-public class Usuario {
+public class Usuario implements Serializable{
 
     /**
      * @param fecha the fecha to set
@@ -80,6 +81,7 @@ public class Usuario {
     private int rol;
     private String password;
     private Calendar fecha;
+   
 
     /**
      * @return the fecha
