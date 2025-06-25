@@ -18,6 +18,7 @@ public class ProyectoPichardo {
     private static ArrayList<Venta> ventas = new ArrayList<>();
     private static ArrayList<LibroV> librosv = new ArrayList<>();
     private static ArrayList<DireccionV> direccionesv = new ArrayList<>();
+    
 
     public static void main(String[] args) {
          PersistenciaBinaria.cargarTodo();
@@ -25,6 +26,7 @@ public class ProyectoPichardo {
         u.setNombre("admin");
         u.setUsuario("admin");
         u.setPassword("admin");
+        u.setCorreo("admin@gmail.com");
         u.setRol(1);
         Calendar fechaActual = Calendar.getInstance();
         u.setFecha(fechaActual);
@@ -176,4 +178,6 @@ libro2.fecha = Calendar.getInstance();
     public static void setDireccionesv(ArrayList<DireccionV> aDireccionesv) {
         direccionesv = aDireccionesv;
     }
+
+    
 }

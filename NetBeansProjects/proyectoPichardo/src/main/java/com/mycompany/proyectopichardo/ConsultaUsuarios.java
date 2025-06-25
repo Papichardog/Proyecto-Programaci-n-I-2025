@@ -34,10 +34,10 @@ public class ConsultaUsuarios extends javax.swing.JFrame {
     private Usuario usuarioSeleccionado;
 
     private void pintarTabla() {
-        String cabeceras[] = {"Nombre", "Usuario", "Password", "Rol", "Fecha"};
+        String cabeceras[] = {"Nombre", "Usuario", "Password", "Rol", "Fecha","Correo"};
 
         DefaultTableModel t = new DefaultTableModel(
-                new String[]{"Nombre", "Usuario", "Password", "Rol", "Fecha"},
+                new String[]{"Nombre", "Usuario", "Password", "Rol", "Fecha","Correo"},
                 ProyectoPichardo.getUsuarios().size()
         );
 
@@ -51,7 +51,9 @@ public class ConsultaUsuarios extends javax.swing.JFrame {
             tabla.setValueAt(u.getPassword(), i, 2);
             tabla.setValueAt(u.getRol(), i, 3);
 tabla.setValueAt(u.getFecha().getTime().toString(), i, 4);
+tabla.setValueAt(u.getCorreo(), i, 5);
         }
+        
 
     }
 

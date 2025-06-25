@@ -81,6 +81,7 @@ public class Usuario implements Serializable{
     private int rol;
     private String password;
     private Calendar fecha;
+    private String correo;
    
 
     /**
@@ -88,5 +89,19 @@ public class Usuario implements Serializable{
      */
     public Calendar getFecha() {
         return fecha;
+    }
+
+    /**
+     * @return the correo
+     */
+    public String getCorreo() {
+        return correo;
+    }
+
+    /**
+     * @param correo the correo to set
+     */
+    public void setCorreo(String correo) {
+        this.correo = correo;
     }
 }
