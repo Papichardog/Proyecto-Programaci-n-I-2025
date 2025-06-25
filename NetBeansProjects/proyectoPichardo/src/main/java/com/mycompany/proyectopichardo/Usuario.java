@@ -4,6 +4,7 @@
  */
 package com.mycompany.proyectopichardo;
 import java.io.Serializable;
+import java.util.ArrayList;
 
 import java.util.Calendar;
 
@@ -81,9 +82,11 @@ public class Usuario implements Serializable{
     private int rol;
     private String password;
     private Calendar fecha;
-    private String correo;
+    private ArrayList<String> correos = new ArrayList<>();
    
-
+public void agregarCorreo(String correo) {
+    this.correos.add(correo);
+}
     /**
      * @return the fecha
      */
@@ -94,14 +97,19 @@ public class Usuario implements Serializable{
     /**
      * @return the correo
      */
-    public String getCorreo() {
-        return correo;
+   
+
+    /**
+     * @return the correos
+     */
+    public ArrayList<String> getCorreos() {
+        return correos;
     }
 
     /**
-     * @param correo the correo to set
+     * @param correos the correos to set
      */
-    public void setCorreo(String correo) {
-        this.correo = correo;
+    public void setCorreos(ArrayList<String> correos) {
+        this.correos = correos;
     }
 }

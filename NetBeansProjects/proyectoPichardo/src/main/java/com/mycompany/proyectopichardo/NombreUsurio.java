@@ -167,7 +167,12 @@ public class NombreUsurio extends javax.swing.JFrame {
         u.setUsuario(jTextField1.getText());
         u.setPassword(jTextField3.getText());
         
-        u.setCorreo(jTextField4.getText());
+        String textoCorreos = jTextField4.getText();
+String[] correosSeparados = textoCorreos.split(",");
+
+for (String correo : correosSeparados) {
+    u.agregarCorreo(correo.trim());
+}
         u.setFecha(Calendar.getInstance());
         String rol = jComboBox1.getSelectedItem().toString();
 

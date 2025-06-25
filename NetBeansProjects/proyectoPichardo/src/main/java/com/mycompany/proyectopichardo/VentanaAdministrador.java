@@ -354,7 +354,11 @@ public class VentanaAdministrador extends javax.swing.JFrame {
                     writer.println("        <password>" + u.getPassword() + "</password>");
                     writer.println("        <rol>" + (u.getRol() == 1 ? "Administrador" : "Vendedor") + "</rol>");
                     writer.println("        <fecha>" + u.getFecha().getTimeInMillis() + "</fecha>");
-                    writer.println("        <correo>" + u.getCorreo() + "</correo>");
+                    writer.println("        <correos>");
+for (String correo : u.getCorreos()) {
+    writer.println("            <correo>" + correo + "</correo>");
+}
+writer.println("        </correos>");
                     writer.println("    </usuario>");
                 }
 

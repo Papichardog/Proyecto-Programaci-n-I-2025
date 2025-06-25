@@ -51,7 +51,7 @@ public class ConsultaUsuarios extends javax.swing.JFrame {
             tabla.setValueAt(u.getPassword(), i, 2);
             tabla.setValueAt(u.getRol(), i, 3);
 tabla.setValueAt(u.getFecha().getTime().toString(), i, 4);
-tabla.setValueAt(u.getCorreo(), i, 5);
+tabla.setValueAt(String.join(", ", u.getCorreos()), i, 5);
         }
         
 

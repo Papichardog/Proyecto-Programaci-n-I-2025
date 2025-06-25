@@ -26,7 +26,7 @@ public class ProyectoPichardo {
         u.setNombre("admin");
         u.setUsuario("admin");
         u.setPassword("admin");
-        u.setCorreo("admin@gmail.com");
+        u.agregarCorreo("admin@gmail.com");
         u.setRol(1);
         Calendar fechaActual = Calendar.getInstance();
         u.setFecha(fechaActual);
