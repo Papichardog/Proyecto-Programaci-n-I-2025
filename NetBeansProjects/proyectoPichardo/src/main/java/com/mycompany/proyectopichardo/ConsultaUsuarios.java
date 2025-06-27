@@ -342,11 +342,12 @@ tabla.setValueAt(String.join(", ", u.getCorreos()), i, 5);
         File archivo = fileChooser.getSelectedFile();
 
         try (PrintWriter writer = new PrintWriter(new FileWriter(archivo))) {
-            writer.println("nombre|usuario|password|rol|fecha");
+           writer.println("nombre|usuario|password|rol|fecha|correos");
 
             for (Usuario u : ProyectoPichardo.getUsuarios()) {
     String fechaTexto = (u.getFecha() != null) ? String.valueOf(u.getFecha().getTimeInMillis()) : "";
-    String linea = u.getNombre() + "|" + u.getUsuario() + "|" + u.getPassword() + "|" + u.getRol() + "|" + fechaTexto;
+    String correosTexto = String.join(",", u.getCorreos());
+String linea = u.getNombre() + "|" + u.getUsuario() + "|" + u.getPassword() + "|" + u.getRol() + "|" + fechaTexto + "|" + correosTexto;
     writer.println(linea);
 }
 

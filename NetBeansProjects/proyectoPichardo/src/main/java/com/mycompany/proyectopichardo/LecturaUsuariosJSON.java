@@ -73,30 +73,38 @@ public class LecturaUsuariosJSON {
 
     public static void guardarUsuariosComoJSON() {
         JFileChooser fileChooser = new JFileChooser();
-        fileChooser.setDialogTitle("Guardar usuarios como archivo JSON");
+    fileChooser.setDialogTitle("Guardar usuarios como archivo JSON");
 
-        int seleccion = fileChooser.showSaveDialog(null);
-        if (seleccion == JFileChooser.APPROVE_OPTION) {
-            File archivo = fileChooser.getSelectedFile();
+    int seleccion = fileChooser.showSaveDialog(null);
+    if (seleccion == JFileChooser.APPROVE_OPTION) {
+        File archivo = fileChooser.getSelectedFile();
 
-            JSONArray array = new JSONArray();
-            for (Usuario u : ProyectoPichardo.getUsuarios()) {
-                JSONObject obj = new JSONObject();
-                obj.put("nombre", u.getNombre());
-                obj.put("usuario", u.getUsuario());
-                obj.put("password", u.getPassword());
-                obj.put("rol", u.getRol());
-                long millis = (u.getFecha() != null) ? u.getFecha().getTimeInMillis() : Calendar.getInstance().getTimeInMillis();
-                obj.put("fecha", millis);
-                array.put(obj);
+        JSONArray array = new JSONArray();
+        for (Usuario u : ProyectoPichardo.getUsuarios()) {
+            JSONObject obj = new JSONObject();
+            obj.put("nombre", u.getNombre());
+            obj.put("usuario", u.getUsuario());
+            obj.put("password", u.getPassword());
+            obj.put("rol", u.getRol());
+            long millis = (u.getFecha() != null) ? u.getFecha().getTimeInMillis() : Calendar.getInstance().getTimeInMillis();
+            obj.put("fecha", millis);
+
+            // ✅ Exportar correos como arreglo JSON
+            JSONArray correosArray = new JSONArray();
+            for (String correo : u.getCorreos()) {
+                correosArray.put(correo);
             }
+            obj.put("correos", correosArray);
 
-            try (PrintWriter writer = new PrintWriter(archivo)) {
-                writer.write(array.toString(4)); // indentado
-                JOptionPane.showMessageDialog(null, "Usuarios exportados exitosamente a JSON.");
-            } catch (IOException e) {
-                JOptionPane.showMessageDialog(null, "Error al guardar archivo JSON: " + e.getMessage());
-            }
+            array.put(obj);
         }
+
+        try (PrintWriter writer = new PrintWriter(archivo)) {
+            writer.write(array.toString(4)); // JSON con indentación
+            JOptionPane.showMessageDialog(null, "Usuarios exportados exitosamente a JSON.");
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(null, "Error al guardar archivo JSON: " + e.getMessage());
+        }
+    }
     }
 }
